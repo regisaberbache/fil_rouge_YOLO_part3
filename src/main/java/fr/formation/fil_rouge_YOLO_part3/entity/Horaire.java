@@ -20,7 +20,7 @@ public class Horaire {
 	private String jour;
 	private LocalDateTime ouverture;
 	private LocalDateTime fermeture;
-	
+		
 	public Horaire(String jour, LocalDateTime ouverture, LocalDateTime fermeture) {
 		this.jour = jour;
 		this.ouverture = ouverture;
