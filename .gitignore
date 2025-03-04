@@ -1,0 +1,59 @@
+# Lombok-generated files
+*.lombok.config
+ 
+# Spring Boot specific
+*.pid
+*.hprof
+hs_err_pid*
+ 
+# Logs
+logs/
+*.log
+*.out
+ 
+# Temporary files
+tmp/
+*.swp
+*.swo
+ 
+# IDE-specific files (IntelliJ IDEA, Eclipse, NetBeans, VS Code)
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+ 
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+ 
+# Spring Data (H2, SQLite, Derby, etc.)
+*.db
+*.sqlite
+*.sql
+*.h2.db
+*.mv.db
+ 
+# Lombok cache files
+.lombok/
+ 
+# Environment variables & secrets
+.env
+*.key
+*.pem
+*.crt
+*.p12
+*.jks
+application-*.yml
+application-*.properties
