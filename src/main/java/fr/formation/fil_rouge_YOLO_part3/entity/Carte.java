@@ -3,6 +3,7 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ public class Carte {
 	private String nom;
 	private String description;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name="asso_cartes_plats",
 			joinColumns= {@JoinColumn(name="id_cartes")},
