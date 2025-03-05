@@ -26,13 +26,10 @@ public class RestaurantTest implements CommandLineRunner {
 		List<Restaurant> restos = restaurantService.getAllRestaurants();
 		restos.forEach(System.out::println);
 		
-		//Restaurant resto = restaurantService.getByIdRestaurant(1);
+		Restaurant resto = restaurantService.getById(1);
 		
-		//Carte carte = resto.getCarte();
-		
-		//System.out.println(carte.getNom());
-		
-		
+		String carteNom = resto.getCarte().getNom();
+		System.out.println("Le nom de la carte du restaurant n°1 est : " + carteNom);
 			
 	}
 	

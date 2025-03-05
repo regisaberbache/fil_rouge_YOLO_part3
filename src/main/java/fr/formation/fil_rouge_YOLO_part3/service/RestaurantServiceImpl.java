@@ -25,8 +25,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-	public Restaurant getByIdRestaurant(Integer id) {
-		return repo.findByIdRestaurant(id);
+	public Restaurant getById(Integer id) {
+		return repo.findById(id);
 	}
 
 	@Override
