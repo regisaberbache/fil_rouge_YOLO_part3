@@ -3,6 +3,7 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,8 @@ import lombok.NoArgsConstructor;
 public class Utilisateur {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idUtilisateur;
 	private String nom;
 	private String prenom;
 	private String telephone;

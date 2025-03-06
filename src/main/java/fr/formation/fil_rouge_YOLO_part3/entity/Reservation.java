@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "reservations")
 public class Reservation {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idReservation;
 	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
