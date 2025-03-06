@@ -28,7 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation getReservationById(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		return repo.findReservationByIdReservation(id);
 	}
 
 	@Override

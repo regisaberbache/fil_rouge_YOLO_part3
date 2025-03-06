@@ -1,5 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +18,8 @@ import lombok.NoArgsConstructor;
 public class LigneCommande {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idLigneCommande;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_plats")
