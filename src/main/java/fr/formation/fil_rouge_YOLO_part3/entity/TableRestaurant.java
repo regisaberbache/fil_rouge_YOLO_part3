@@ -32,7 +32,6 @@ public class TableRestaurant {
 	@JoinColumn(name="id_tables_restaurant")
 	private List<Reservation> reservations;
 	
-
 	public TableRestaurant(Integer nbPlaces, Integer numeroTable, List<Reservation> reservations) {
 		this.nbPlaces = nbPlaces;
 		this.numeroTable = numeroTable;

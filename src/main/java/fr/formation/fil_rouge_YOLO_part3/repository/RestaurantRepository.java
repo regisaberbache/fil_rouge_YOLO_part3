@@ -8,5 +8,7 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 	
-	Optional<Restaurant> findById(Integer id);
+
+	Restaurant findById(Integer id);
+
 }
