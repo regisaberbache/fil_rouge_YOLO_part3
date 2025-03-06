@@ -36,6 +36,7 @@ public class Utilisateur {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Reservation> reservations;	
 	
+	@OneToOne
 	@JoinColumn(name = "id_restaurants")
 	private Restaurant restaurant;
 
