@@ -19,7 +19,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "tables_restaurant")
 public class TableRestaurant {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idTableRestaurant;
 	
 	@Column(name="nb_places")
 	private Integer nbPlaces;

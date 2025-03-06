@@ -22,7 +22,7 @@ public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private Integer id;
+	private Integer idRestaurant;
 	private String nom;
 	private String adresse;
 	private String email;
