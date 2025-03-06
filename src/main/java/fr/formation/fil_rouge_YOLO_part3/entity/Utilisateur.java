@@ -24,7 +24,7 @@ public class Utilisateur {
 	private String prenom;
 	private String telephone;
 	private String email;
-	private String login;
+	private String login; 
 	private String password;
 
 	@OneToOne
