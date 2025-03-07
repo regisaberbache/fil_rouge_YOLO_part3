@@ -15,11 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
-import fr.formation.fil_rouge_YOLO_part3.rest.RestaurantDto.RestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
 
@@ -42,8 +39,8 @@ public class UtilisateurRest {
 	public ResponseEntity getById(@PathVariable("id") Integer id) {
 		Utilisateur utilisateur;
 		try {
-			utilisateur = service.getByIdUtilisateur(id);
-		} catch (RestaurantServiceException e) {
+			utilisateur = service.getUtilisateurById(id);
+		} catch (UtilisateurServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
 		return ResponseEntity.ok(new UtilisateurDTO(utilisateur));
@@ -64,10 +61,10 @@ public class UtilisateurRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) {
+	public ResponseEntity delete(@PathVariable("id") Integer id) throws UtilisateurServiceException {
 		Utilisateur utilisateur;
 		try {
-			utilisateur = service.getByIdUtilisateur(id);
+			utilisateur = service.getUtilisateurById(id);
 		} catch (UtilisateurServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
