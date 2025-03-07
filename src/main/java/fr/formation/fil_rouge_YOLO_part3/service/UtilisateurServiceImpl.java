@@ -28,7 +28,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	@Override
 	public Utilisateur getUtilisateurById(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		return repo.findById(id).orElse(null);
 	}
 
 	@Override
