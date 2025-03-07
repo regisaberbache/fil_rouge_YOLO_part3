@@ -14,33 +14,28 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	UtilisateurRepository repo;
 
 	@Override
-	public Utilisateur createUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public void createUtilisateur(Utilisateur utilisateur) {
+		repo.save(utilisateur);
 	}
 
 	@Override
 	public List<Utilisateur> getAllUtilisateurs() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 	@Override
 	public Utilisateur getUtilisateurById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findUtilisateurByIdUtilisateur(id);
 	}
 
 	@Override
-	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateUtilisateur(Utilisateur utilisateur) {
+		repo.save(utilisateur);
 	}
 
 	@Override
-	public Utilisateur deleteUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteUtilisateur(Utilisateur utilisateur) {
+		repo.delete(utilisateur);
 	}
 	
 	
