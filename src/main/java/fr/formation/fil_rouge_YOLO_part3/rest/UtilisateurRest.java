@@ -16,60 +16,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.RestaurantDto.RestaurantDTO;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
+import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
+import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
 
 @RestController
-@RequestMapping("/restaurant")
-public class RestaurantRest {
+@RequestMapping("/utilisateur")
+public class UtilisateurRest {
 	@Autowired
-	RestaurantService service;
+	UtilisateurService service;
 	
 	@GetMapping
-	public ResponseEntity<List<RestaurantDTO>> getAll() {
-		List<RestaurantDTO> lst = new ArrayList<>();
-		for (Restaurant restaurant : service.getAllRestaurants()) {
-			lst.add(new RestaurantDTO(restaurant));
+	public ResponseEntity<List<UtilisateurDTO>> getAll() {
+		List<UtilisateurDTO> lst = new ArrayList<>();
+		for (Utilisateur utilisateur : service.getAllUtilisateurs()) {
+			lst.add(new UtilisateurDTO(utilisateur));
 		}
 		return ResponseEntity.ok(lst);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity getById(@PathVariable("id") Integer id) {
-		Restaurant restaurant;
+		Utilisateur utilisateur;
 		try {
-			restaurant = service.getById(id);
+			utilisateur = service.getByIdUtilisateur(id);
 		} catch (RestaurantServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
-		return ResponseEntity.ok(new RestaurantDTO(restaurant));
+		return ResponseEntity.ok(new UtilisateurDTO(utilisateur));
 	}
 	
 	@PostMapping
-	public ResponseEntity<RestaurantDTO> create(@RequestBody RestaurantDTO restaurantDto) {
+	public ResponseEntity<UtilisateurDTO> create(@RequestBody UtilisateurDTO utilisateurDto) {
 		// TODO Gérer les exceptions
-		service.createRestaurant(restaurantDto.toEntity());
-		return ResponseEntity.ok(restaurantDto);
+		service.createUtilisateur(utilisateurDto.toEntity());
+		return ResponseEntity.ok(utilisateurDto);
 	}
 	
 	@PutMapping
-	public ResponseEntity<RestaurantDTO> update(@RequestBody RestaurantDTO restaurantDto) {
+	public ResponseEntity<UtilisateurDTO> update(@RequestBody UtilisateurDTO utilisateurDto) {
 		// TODO Gérer les exceptions
-		service.updateRestaurant(restaurantDto.toEntity());
-		return ResponseEntity.ok(restaurantDto);
+		service.updateUtilisateur(utilisateurDto.toEntity());
+		return ResponseEntity.ok(utilisateurDto);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity delete(@PathVariable("id") Integer id) {
-		Restaurant restaurant;
+		Utilisateur utilisateur;
 		try {
-			restaurant = service.getById(id);
-		} catch (RestaurantServiceException e) {
+			utilisateur = service.getByIdUtilisateur(id);
+		} catch (UtilisateurServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
-		service.deleteRestaurant(restaurant);
-		return ResponseEntity.ok(new RestaurantDTO(restaurant));
+		service.deleteUtilisateur(utilisateur);
+		return ResponseEntity.ok(new UtilisateurDTO(utilisateur));
 	}
+	
 	
 }
