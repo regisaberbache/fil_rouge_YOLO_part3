@@ -5,7 +5,6 @@ import java.util.List;
 import fr.formation.fil_rouge_YOLO_part3.entity.Carte;
 import fr.formation.fil_rouge_YOLO_part3.entity.Horaire;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
-import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,7 @@ public class RestaurantDTO {
 	private String url_imageDto;
 	private Carte carteDto;
 	private List<Horaire> horairesDto;
-	
+
 	public RestaurantDTO(Restaurant restaurant) {
 		this.idRestaurantDto = restaurant.getIdRestaurant();
 		this.nomDto = restaurant.getNom();
