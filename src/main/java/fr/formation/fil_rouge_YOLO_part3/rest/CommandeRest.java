@@ -36,7 +36,7 @@ public class CommandeRest {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity getById(@PathVariable("id") Integer id) {
+	public ResponseEntity getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
 			commande = service.getCommandeById(id);
