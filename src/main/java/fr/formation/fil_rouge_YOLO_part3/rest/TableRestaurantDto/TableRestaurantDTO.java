@@ -23,7 +23,7 @@ public class TableRestaurantDTO {
 		this.nbPlaces = tableRestaurant.getNbPlaces();
 		this.numeroTable = tableRestaurant.getNumeroTable();
 		this.reservations = tableRestaurant.getReservations().stream()
-		        .map(ReservationDTO::new)
+		        .map(reservation -> new ReservationDTO(reservation))
 		        .collect(Collectors.toList());
 	}
 	
