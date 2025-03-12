@@ -5,10 +5,10 @@ import java.util.List;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 
 public interface ReservationService {
-	Reservation createReservation(Reservation reservation);
+	void createReservation(Reservation reservation);
 	List<Reservation> getAllReservations();
-	Reservation getReservationById(Integer id);
-	Reservation updateReservation(Reservation reservation);
-	Reservation deleteReservation(Reservation reservation);
+	Reservation getReservationById(Integer id) throws ReservationServiceException ;
+	void updateReservation(Reservation reservation);
+	void deleteReservation(Reservation reservation);
 
 }

@@ -2,6 +2,7 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,8 @@ import lombok.NoArgsConstructor;
 public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idRestaurant;
 	private String nom;
 	private String adresse;
 	private String email;
@@ -38,15 +40,12 @@ public class Restaurant {
 	@JoinColumn(name = "id_restaurants")
 	private List<Horaire> horaires;
 
-	public Restaurant(String nom, String adresse, String email, String url_image, Carte carte,
-			List<TableRestaurant> tablesRestaurant, List<Horaire> horaires) {
+	public Restaurant(String nom, String adresse, String email, String url_image, Carte carte) {
 		this.nom = nom;
 		this.adresse = adresse;
 		this.email = email;
 		this.url_image = url_image;
 		this.carte = carte;
-		this.tablesRestaurant = tablesRestaurant;
-		this.horaires = horaires;
 	}
 
 

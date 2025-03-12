@@ -1,5 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "plats")
 public class Plat {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idPlat;
 	private String nom;
 	private Double prix;
 	private String description;

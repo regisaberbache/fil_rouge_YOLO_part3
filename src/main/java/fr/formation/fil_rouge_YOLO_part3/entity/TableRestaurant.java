@@ -19,7 +19,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "tables_restaurant")
 public class TableRestaurant {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idTableRestaurant;
 	
 	@Column(name="nb_places")
 	private Integer nbPlaces;
@@ -31,7 +32,6 @@ public class TableRestaurant {
 	@JoinColumn(name="id_tables_restaurant")
 	private List<Reservation> reservations;
 	
-
 	public TableRestaurant(Integer nbPlaces, Integer numeroTable, List<Reservation> reservations) {
 		this.nbPlaces = nbPlaces;
 		this.numeroTable = numeroTable;

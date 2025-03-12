@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,34 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	UtilisateurRepository repo;
 
 	@Override
-	public Utilisateur createUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public void createUtilisateur(Utilisateur utilisateur) {
+		repo.save(utilisateur);
 	}
 
 	@Override
 	public List<Utilisateur> getAllUtilisateurs() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
+	}
+	
+	@Override
+	public Utilisateur getUtilisateurById(Integer id) throws UtilisateurServiceException {
+		Optional<Utilisateur> utilisateur = repo.findById(id);
+		if(utilisateur.isPresent()) {
+			return utilisateur.get();
+		}
+		else {
+			throw new UtilisateurServiceException("Cette identifiant n'existe pas");
+		}
 	}
 
 	@Override
-	public Utilisateur getUtilisateurById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateUtilisateur(Utilisateur utilisateur) {
+		repo.save(utilisateur);
 	}
 
 	@Override
-	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Utilisateur deleteUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteUtilisateur(Utilisateur utilisateur) {
+		repo.delete(utilisateur);
 	}
 	
 	

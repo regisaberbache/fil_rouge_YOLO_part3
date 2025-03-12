@@ -2,22 +2,30 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "reservations")
 public class Reservation {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idReservation;
 	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
@@ -27,6 +35,10 @@ public class Reservation {
  
 	@Column(name = "horaire_reservation")
 	private LocalDateTime horaireReservation;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="id_utilisateurs")
+	private Utilisateur utilisateur;
 
 
 	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
@@ -34,7 +46,13 @@ public class Reservation {
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
 	}
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+	}
+	
+	
 }

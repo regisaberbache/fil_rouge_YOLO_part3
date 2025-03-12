@@ -2,6 +2,7 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "cartes")
 public class Carte {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name="id")
+	private Integer idCarte;
 	private String nom;
 	private String description;
 	

@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,34 @@ public class ReservationServiceImpl implements ReservationService {
 	ReservationRepository repo;
 
 	@Override
-	public Reservation createReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void createReservation(Reservation reservation) {
+		repo.save(reservation);
 	}
 
 	@Override
 	public List<Reservation> getAllReservations() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 	@Override
-	public Reservation getReservationById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Reservation getReservationById(Integer id) throws ReservationServiceException {
+		Optional<Reservation> reservation = repo.findById(id);
+		if(reservation.isPresent()) {
+			return reservation.get();
+		}
+		else {
+			throw new ReservationServiceException("Cet identifiant n'existe pas");
+		}
 	}
 
 	@Override
-	public Reservation updateReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateReservation(Reservation reservation) {
+		repo.save(reservation);
 	}
 
 	@Override
-	public Reservation deleteReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteReservation(Reservation reservation) {
+		repo.delete(reservation);
 	}
 
 }
