@@ -11,11 +11,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "reservations")
 public class Reservation {
@@ -42,9 +46,13 @@ public class Reservation {
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
 	}
-	
-	
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+	}
+	
+	
 }

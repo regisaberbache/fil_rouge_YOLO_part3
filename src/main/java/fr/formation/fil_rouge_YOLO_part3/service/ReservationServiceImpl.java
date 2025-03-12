@@ -14,33 +14,28 @@ public class ReservationServiceImpl implements ReservationService {
 	ReservationRepository repo;
 
 	@Override
-	public Reservation createReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void createReservation(Reservation reservation) {
+		repo.save(reservation);
 	}
 
 	@Override
 	public List<Reservation> getAllReservations() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 	@Override
 	public Reservation getReservationById(Integer id) {
-		// TODO Auto-generated method stub
 		return repo.findReservationByIdReservation(id);
 	}
 
 	@Override
-	public Reservation updateReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateReservation(Reservation reservation) {
+		repo.save(reservation);
 	}
 
 	@Override
-	public Reservation deleteReservation(Reservation reservation) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteReservation(Reservation reservation) {
+		repo.delete(reservation);
 	}
 
 }
