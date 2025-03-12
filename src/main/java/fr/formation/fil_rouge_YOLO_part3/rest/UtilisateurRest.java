@@ -19,6 +19,7 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/utilisateur")
@@ -47,14 +48,14 @@ public class UtilisateurRest {
 	}
 	
 	@PostMapping
-	public ResponseEntity<UtilisateurDTO> create(@RequestBody UtilisateurDTO utilisateurDto) {
+	public ResponseEntity<UtilisateurDTO> create(@Valid @RequestBody UtilisateurDTO utilisateurDto) {
 		// TODO Gérer les exceptions
 		service.createUtilisateur(utilisateurDto.toEntity());
 		return ResponseEntity.ok(utilisateurDto);
 	}
 	
 	@PutMapping
-	public ResponseEntity<UtilisateurDTO> update(@RequestBody UtilisateurDTO utilisateurDto) {
+	public ResponseEntity<UtilisateurDTO> update(@Valid @RequestBody UtilisateurDTO utilisateurDto) {
 		// TODO Gérer les exceptions
 		service.updateUtilisateur(utilisateurDto.toEntity());
 		return ResponseEntity.ok(utilisateurDto);

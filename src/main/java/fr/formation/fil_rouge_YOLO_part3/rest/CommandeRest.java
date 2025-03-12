@@ -19,12 +19,16 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired
 	CommandeService service;
+	
+	@Operation(summary = "Liste, ajoute, supprime... des commandes",
+		       description = "Bla bla bla")
 	
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {

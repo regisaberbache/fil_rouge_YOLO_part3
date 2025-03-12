@@ -1,6 +1,8 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UtilisateurDTO {
 	private Integer idUtilisateur;
+	
+	@NotBlank(message = "Le nom doit être renseigné") // validateur pour de la validation frontale
 	private String nom;
 	private String prenom;
 	private String telephone;
+	
+	@Email
 	private String email;
 //	private String loginDto;
 //	private String passwordDto;
