@@ -54,7 +54,7 @@ public class Utilisateur {
 	@Override
 	public String toString() {
 		return nom + ", prenom=" + prenom + ", telephone="
-				+ telephone + ", email=" + email + ", login=" + login + ", password=" + password + ", role=" + role
+				+ telephone + ", email=" + email + ", login=" + login + ", password=" + password + ", role=" + role.getLibelle()
 				+ ", restaurant=" + restaurant.getNom() + "]";
 	}
 	

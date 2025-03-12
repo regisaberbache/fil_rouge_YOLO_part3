@@ -27,9 +27,8 @@ public class CommandeRest {
 	@Autowired
 	CommandeService service;
 	
-	@Operation(summary = "Liste, ajoute, supprime... des commandes",
-		       description = "Bla bla bla")
-	
+	@Operation(summary = "Liste les commandes",
+		       description = "")
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
 		List<CommandeDTO> lst = new ArrayList<>();
@@ -39,7 +38,7 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("/statut/{statut}")
+	@GetMapping("{statut}")
 	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : service.getAllCommandesByStatut(statut)) {
@@ -48,7 +47,7 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("{id}")
+	@PutMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
