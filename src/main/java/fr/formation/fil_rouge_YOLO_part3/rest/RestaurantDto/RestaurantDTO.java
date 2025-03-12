@@ -1,11 +1,12 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.RestaurantDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Carte;
 import fr.formation.fil_rouge_YOLO_part3.entity.Horaire;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
-import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,31 +17,36 @@ import lombok.NoArgsConstructor;
 public class RestaurantDTO {
 	private Integer idRestaurantDto;
 	
-	private String nomDto;
-	private String adresseDto;
-	private String emailDto;
-	private String url_imageDto;
-	private Carte carteDto;
-	private List<Horaire> horairesDto;
-	
+	private String nom;
+	private String adresse;
+	private String email;
+	private String url_image;
+	private Carte carte;
+	private List<Horaire> horaires;
+	private List<TableRestaurantDTO> tablesRestaurant;
+
 	public RestaurantDTO(Restaurant restaurant) {
 		this.idRestaurantDto = restaurant.getIdRestaurant();
-		this.nomDto = restaurant.getNom();
-		this.adresseDto = restaurant.getAdresse();
-		this.emailDto = restaurant.getEmail();
-		this.carteDto = restaurant.getCarte();
-		this.horairesDto = restaurant.getHoraires();
+		this.nom = restaurant.getNom();
+		this.adresse = restaurant.getAdresse();
+		this.url_image = restaurant.getUrl_image();
+		this.email = restaurant.getEmail();
+		this.carte = restaurant.getCarte();
+		this.horaires = restaurant.getHoraires();
+		this.tablesRestaurant = restaurant.getTablesRestaurant().stream()
+		        .map(table -> new TableRestaurantDTO(table))
+		        .collect(Collectors.toList());
 	}
 	
 	public Restaurant toEntity() {
 		Restaurant restaurant = new Restaurant();
 		restaurant.setIdRestaurant(idRestaurantDto);
-		restaurant.setNom(nomDto);
-		restaurant.setAdresse(adresseDto);
-		restaurant.setEmail(emailDto);
-		restaurant.setUrl_image(url_imageDto);
-		restaurant.setCarte(carteDto);
-		restaurant.setHoraires(horairesDto);
+		restaurant.setNom(nom);
+		restaurant.setAdresse(adresse);
+		restaurant.setEmail(email);
+		restaurant.setUrl_image(url_image);
+		restaurant.setCarte(carte);
+		restaurant.setHoraires(horaires);
 		return restaurant;
 	}
 	

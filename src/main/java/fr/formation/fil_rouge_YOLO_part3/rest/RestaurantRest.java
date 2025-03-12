@@ -36,7 +36,7 @@ public class RestaurantRest {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity getById(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
 		Restaurant restaurant;
 		try {
 			restaurant = service.getById(id);
@@ -61,7 +61,7 @@ public class RestaurantRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {
 		Restaurant restaurant;
 		try {
 			restaurant = service.getById(id);

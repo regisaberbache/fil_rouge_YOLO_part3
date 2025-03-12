@@ -6,6 +6,6 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer> {
 
-	Utilisateur findUtilisateurByIdUtilisateur(Integer id);
+	Utilisateur findByIdUtilisateur(Integer idUtilisateur);
 
 }

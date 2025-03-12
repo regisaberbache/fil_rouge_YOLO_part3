@@ -34,32 +34,32 @@ public class ReservationRest {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity getReservationById(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> getReservationById(@PathVariable("id") Integer id) throws ReservationServiceException {
 		Reservation reservation;
 		try {
 			reservation = service.getReservationById(id);
 		} catch (ReservationServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
 		return ResponseEntity.ok(new ReservationDTO(reservation));
 	}
 	
 	@PostMapping
-	public ResponseEntity<ReservationDTO> create(@RequestBody ReservationDTO reservationDTO) {
+	public ResponseEntity<ReservationDTO> create(@RequestBody ReservationDTO reservationDto) {
 		// TODO Gérer les exceptions
-		service.createReservation(reservationDTO.toEntity());
-		return ResponseEntity.ok(reservationDTO);
+		service.createReservation(reservationDto.toEntity());
+		return ResponseEntity.ok(reservationDto);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ReservationDTO> update(@RequestBody ReservationDTO reservationDTO) {
+	public ResponseEntity<ReservationDTO> update(@RequestBody ReservationDTO reservationDto) {
 		// TODO Gérer les exceptions
-		service.updateReservation(reservationDTO.toEntity());
-		return ResponseEntity.ok(reservationDTO);
+		service.updateReservation(reservationDto.toEntity());
+		return ResponseEntity.ok(reservationDto);
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) throws ReservationServiceException {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws ReservationServiceException {
 		Reservation reservation;
 		try {
 			reservation = service.getReservationById(id);
@@ -69,5 +69,4 @@ public class ReservationRest {
 		service.deleteReservation(reservation);
 		return ResponseEntity.ok(new ReservationDTO(reservation));
 	}
-		
 }
