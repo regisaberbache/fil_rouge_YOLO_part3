@@ -6,6 +6,6 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 	
-	Reservation findReservationByIdReservation(Integer idReservation);
+	Reservation findByIdReservation(Integer idReservation);
 
 }

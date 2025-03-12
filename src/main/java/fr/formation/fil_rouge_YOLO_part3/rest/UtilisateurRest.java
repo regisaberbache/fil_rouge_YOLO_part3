@@ -36,7 +36,7 @@ public class UtilisateurRest {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity getById(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
 		Utilisateur utilisateur;
 		try {
 			utilisateur = service.getUtilisateurById(id);
@@ -61,7 +61,7 @@ public class UtilisateurRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) throws UtilisateurServiceException {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws UtilisateurServiceException {
 		Utilisateur utilisateur;
 		try {
 			utilisateur = service.getUtilisateurById(id);

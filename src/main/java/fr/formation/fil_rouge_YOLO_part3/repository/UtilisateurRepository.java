@@ -12,7 +12,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
 	Utilisateur findUtilisateurByIdUtilisateur(Integer id);
 	@Query("FROM Utilisateur u where u.role.libelle = :role")
 	Utilisateur trouverUtilisateurParRole(@Param ("role") String role);
-	
-	
+	Utilisateur findByIdUtilisateur(Integer idUtilisateur);
 
 }
