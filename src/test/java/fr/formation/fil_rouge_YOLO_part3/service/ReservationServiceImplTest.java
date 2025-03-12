@@ -35,7 +35,7 @@ class ReservationServiceImplTest implements CommandLineRunner {
     }
 
 	@Test
-	void CreateReservation_insere_une_Reservation() {
+	void CreateReservation_insere_une_Reservation() throws UtilisateurServiceException {
 		Utilisateur utilisateur = utilisateurService.getUtilisateurById(1);
 		System.out.println(utilisateur.getNom());
 		
@@ -57,7 +57,7 @@ class ReservationServiceImplTest implements CommandLineRunner {
 	}
 
 	@Test
-	void testGetReservationById() {
+	void testGetReservationById() throws ReservationServiceException {
 		Reservation resa = reservationService.getReservationById(2);
 		System.out.println(resa.getStatut());
 		assertTrue(resa != null);

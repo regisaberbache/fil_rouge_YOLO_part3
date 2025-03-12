@@ -1,9 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.controller;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,7 +11,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 
 @SpringBootApplication
-public class UtilisateurTest implements CommandLineRunner {
+public class UtilisateurTest{
 	@Autowired
 	UtilisateurService utilisateurService;
 	@Autowired
@@ -22,9 +19,9 @@ public class UtilisateurTest implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FilRougeYoloPart3Application.class, args);
+
 	}
 
-	@Override
 	public void run(String... args) throws Exception {
 		Utilisateur utilisateur = utilisateurService.getUtilisateurById(1);
 		System.out.println(utilisateur.getNom());
@@ -44,4 +41,5 @@ public class UtilisateurTest implements CommandLineRunner {
 			
 	}
 	
+
 }

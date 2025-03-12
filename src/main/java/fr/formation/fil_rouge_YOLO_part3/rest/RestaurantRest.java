@@ -1,8 +1,10 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.rest.RestaurantDto.RestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
+import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -23,36 +27,49 @@ public class RestaurantRest {
 	RestaurantService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Restaurant>> getAll() {
-		return ResponseEntity.ok(service.getAllRestaurants());
+	public ResponseEntity<List<RestaurantDTO>> getAll() {
+		List<RestaurantDTO> lst = new ArrayList<>();
+		for (Restaurant restaurant : service.getAllRestaurants()) {
+			lst.add(new RestaurantDTO(restaurant));
+		}
+		return ResponseEntity.ok(lst);
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<Restaurant> getById(@PathVariable("id") Integer id) {
-		// TODO Gérer l'ID non présent
-		return ResponseEntity.ok(service.getById(id));
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
+		Restaurant restaurant;
+		try {
+			restaurant = service.getById(id);
+		} catch (RestaurantServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+		}
+		return ResponseEntity.ok(new RestaurantDTO(restaurant));
 	}
 	
 	@PostMapping
-	public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
+	public ResponseEntity<RestaurantDTO> create(@RequestBody RestaurantDTO restaurantDto) {
 		// TODO Gérer les exceptions
-		service.createRestaurant(restaurant);
-		return ResponseEntity.ok(restaurant);
+		service.createRestaurant(restaurantDto.toEntity());
+		return ResponseEntity.ok(restaurantDto);
 	}
 	
 	@PutMapping
-	public ResponseEntity<Restaurant> update(@RequestBody Restaurant restaurant) {
+	public ResponseEntity<RestaurantDTO> update(@RequestBody RestaurantDTO restaurantDto) {
 		// TODO Gérer les exceptions
-		service.updateRestaurant(restaurant);
-		return ResponseEntity.ok(restaurant);
+		service.updateRestaurant(restaurantDto.toEntity());
+		return ResponseEntity.ok(restaurantDto);
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Restaurant> delete(@PathVariable("id") Integer id) {
-		// TODO Gérer l'identifiant non présent
-		Restaurant restaurant = service.getById(id);
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {
+		Restaurant restaurant;
+		try {
+			restaurant = service.getById(id);
+		} catch (RestaurantServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 		service.deleteRestaurant(restaurant);
-		return ResponseEntity.ok(restaurant);
+		return ResponseEntity.ok(new RestaurantDTO(restaurant));
 	}
 	
 }

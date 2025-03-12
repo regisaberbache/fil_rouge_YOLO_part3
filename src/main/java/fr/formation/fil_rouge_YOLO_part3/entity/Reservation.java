@@ -14,10 +14,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @Entity
 @AllArgsConstructor
 @Builder
@@ -46,9 +44,13 @@ public class Reservation {
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
 	}
-	
-	
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+	}
+	
+	
 }
