@@ -58,10 +58,10 @@ public class UtilisateurDTO {
 		utilisateur.setTelephone(telephone);
 		utilisateur.setLogin(loginDto);
 		utilisateur.setPassword(passwordDto);
-		if(roleDto != null || !"".equalsIgnoreCase(roleDto.getIdRole().toString()) || !"".equalsIgnoreCase(roleDto.getLibelle())) {			
+		if(roleDto != null && !"".equalsIgnoreCase(roleDto.getIdRole().toString()) && !"".equalsIgnoreCase(roleDto.getLibelle())) {			
 			utilisateur.setRole(roleDto);			
 		}
-		if(idRestaurant != null) {
+		if(idRestaurant != null && !"".equalsIgnoreCase(idRestaurant.toString())) {
 			utilisateur.setRestaurant(restaurantService.getById(idRestaurant));
 		}
 		return utilisateur;
