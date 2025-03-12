@@ -8,5 +8,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 	
 
 	Restaurant findByIdRestaurant(Integer idRestaurant);
-
+	
 }
