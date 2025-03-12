@@ -39,6 +39,15 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
+	@GetMapping("/statut/{statut}")
+	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
+		List<CommandeDTO> lst = new ArrayList<>();
+		for (Commande commande : service.getAllCommandesByStatut(statut)) {
+			lst.add(new CommandeDTO(commande));
+		}
+		return ResponseEntity.ok(lst);
+	}
+	
 	@GetMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
