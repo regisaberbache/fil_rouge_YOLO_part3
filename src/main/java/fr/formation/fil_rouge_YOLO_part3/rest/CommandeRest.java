@@ -19,12 +19,16 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
 
 @RestController
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired
 	CommandeService service;
+	
+	@Autowired
+	PlatService platService;
 	
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
@@ -35,7 +39,7 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("/statut/{statut}")
+	@GetMapping("{statut}")
 	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : service.getAllCommandesByStatut(statut)) {
@@ -44,8 +48,9 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("{id}")
-	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
+	@SuppressWarnings("rawtypes")
+	@PutMapping("{id}")
+	public ResponseEntity getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
 			commande = service.getCommandeById(id);
