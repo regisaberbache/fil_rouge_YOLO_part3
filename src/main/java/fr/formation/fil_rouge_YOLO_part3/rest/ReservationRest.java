@@ -34,7 +34,7 @@ public class ReservationRest {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity getReservationById(@PathVariable("id") Integer id) throws ReservationServiceException {
+	public ResponseEntity<Object> getReservationById(@PathVariable("id") Integer id) throws ReservationServiceException {
 		Reservation reservation;
 		try {
 			reservation = service.getReservationById(id);
@@ -59,7 +59,7 @@ public class ReservationRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity delete(@PathVariable("id") Integer id) throws ReservationServiceException {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws ReservationServiceException {
 		Reservation reservation;
 		try {
 			reservation = service.getReservationById(id);
