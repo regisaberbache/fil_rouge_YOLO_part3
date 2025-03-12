@@ -23,6 +23,11 @@ public class CommandeServiceImpl implements CommandeService {
 	public List<Commande> getAllCommandes() {
 		return repo.findAll();
 	}
+	
+	@Override
+	public List<Commande> getAllCommandesByStatut(String statut) {
+		return repo.findAllCommandeByCommandeStatut(statut);
+	}
 
 	@Override
 	public Commande getCommandeById(Integer id) throws CommandeServiceException{
