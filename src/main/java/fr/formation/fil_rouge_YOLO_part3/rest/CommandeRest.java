@@ -19,12 +19,16 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
 
 @RestController
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired
 	CommandeService service;
+	
+	@Autowired
+	PlatService platService;
 	
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
@@ -44,16 +48,16 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-//	@GetMapping("{id}")
-//	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
-//		Commande commande;
-//		try {
-//			commande = service.getCommandeById(id);
-//		} catch (CommandeServiceException e) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
-//		}
-//		return ResponseEntity.ok(new CommandeDTO(commande));
-//	}
+	@PutMapping("{id}")
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+		}
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
 	
 	@PostMapping
 	public ResponseEntity<CommandeDTO> create(@RequestBody CommandeDTO commandeDto) {
