@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
@@ -42,17 +43,25 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("occupees")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
-	    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-	    List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
-	        .filter(table -> !table.getReservations().isEmpty())
-	        .map(table -> new TableRestaurantDTO(table))
-	        .collect(Collectors.toList());
-	    return ResponseEntity.ok(tablesOccupees);
+	@GetMapping("{id}")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("id") Integer id) {
+		 Restaurant restaurant;
+		    try {
+		        restaurant = restaurantService.getById(id);
+		    } catch (RestaurantServiceException e) {
+		        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		    }
+		    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
+		    List<TableRestaurantDTO> tablesNonOccupees = toutesLesTables.stream()
+		        .filter(table -> table.getRestaurant() != null)
+		        .filter(table -> table.getReservations().isEmpty())
+		        .filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
+		        .map(table -> new TableRestaurantDTO(table))
+		        .collect(Collectors.toList());
+		    return ResponseEntity.ok(tablesNonOccupees);
 	}
 
-	@GetMapping("libre/{id}")
+	@GetMapping("libres/{id}")
 	public ResponseEntity<List<TableRestaurantDTO>> getTablesLibres(@PathVariable("id") Integer id) {
 	    Restaurant restaurant;
 	    try {
@@ -69,18 +78,35 @@ public class TableRestaurantRest {
 	        .collect(Collectors.toList());
 	    return ResponseEntity.ok(tablesLibres);
 	}
-
-
-	@GetMapping("{id}")
-	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
-		TableRestaurant tableRestaurant;
-		try {
-			tableRestaurant = service.getTableRestaurantById(id);
-		} catch (TableRestaurantServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
-		}
-		return ResponseEntity.ok(new TableRestaurantDTO(tableRestaurant));
+	
+	@GetMapping("occupees")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
+	    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
+	    List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
+	        .filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() &&
+	                         table.getReservations().stream()
+	                             .anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
+	        .map(table -> {
+	            List<ReservationDTO> reservationsFiltrees = table.getReservations().stream()
+	                .filter(reservation -> "arrivee".equals(reservation.getStatut()))
+	                .map(reservation -> new ReservationDTO(reservation))
+	                .collect(Collectors.toList());
+	            return new TableRestaurantDTO(table, reservationsFiltrees);
+	        })
+	        .collect(Collectors.toList());
+	    return ResponseEntity.ok(tablesOccupees);
 	}
+ 		 
+//	@GetMapping("{id}")
+//	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
+//		TableRestaurant tableRestaurant;
+//		try {
+//			tableRestaurant = service.getTableRestaurantById(id);
+//		} catch (TableRestaurantServiceException e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+//		}
+//		return ResponseEntity.ok(new TableRestaurantDTO(tableRestaurant));
+//	}
 	
 	@PostMapping
 	public ResponseEntity<TableRestaurantDTO> create(@RequestBody TableRestaurantDTO tableRestaurantDto) {
