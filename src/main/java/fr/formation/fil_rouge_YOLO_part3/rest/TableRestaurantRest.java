@@ -2,6 +2,7 @@ package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
+import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 
@@ -25,6 +29,9 @@ import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException
 public class TableRestaurantRest {
 	@Autowired
 	TableRestaurantService service;
+	
+	@Autowired
+	RestaurantService restaurantService;
 	
 	@GetMapping
 	public ResponseEntity<List<TableRestaurantDTO>> getAll() {
@@ -35,6 +42,35 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(lst);
 	}
 	
+	@GetMapping("occupees")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
+	    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
+	    List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
+	        .filter(table -> !table.getReservations().isEmpty())
+	        .map(table -> new TableRestaurantDTO(table))
+	        .collect(Collectors.toList());
+	    return ResponseEntity.ok(tablesOccupees);
+	}
+
+	@GetMapping("libre/{id}")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesLibres(@PathVariable("id") Integer id) {
+	    Restaurant restaurant;
+	    try {
+	        restaurant = restaurantService.getById(id);
+	    } catch (RestaurantServiceException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+	    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
+	    List<TableRestaurantDTO> tablesLibres = toutesLesTables.stream()
+	        .filter(table -> table.getRestaurant() != null)
+	        .filter(table -> table.getReservations().isEmpty())
+	        .filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
+	        .map(table -> new TableRestaurantDTO(table))
+	        .collect(Collectors.toList());
+	    return ResponseEntity.ok(tablesLibres);
+	}
+
+
 	@GetMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
 		TableRestaurant tableRestaurant;

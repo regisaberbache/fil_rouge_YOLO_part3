@@ -16,12 +16,18 @@ public class TableRestaurantDTO {
 	private Integer idTableRestaurant;
 	private Integer nbPlaces;
 	private Integer numeroTable;
+	private Integer idRestaurant;
 	private List<ReservationDTO> reservations;
 	
 	public TableRestaurantDTO(TableRestaurant tableRestaurant) {
 		this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();
 		this.nbPlaces = tableRestaurant.getNbPlaces();
 		this.numeroTable = tableRestaurant.getNumeroTable();
+		if (tableRestaurant.getRestaurant() != null || tableRestaurant.getRestaurant().getIdRestaurant() != null) {
+            this.idRestaurant = tableRestaurant.getRestaurant().getIdRestaurant();
+        } else {
+            this.idRestaurant = null;
+        }
 		this.reservations = tableRestaurant.getReservations().stream()
 		        .map(reservation -> new ReservationDTO(reservation))
 		        .collect(Collectors.toList());

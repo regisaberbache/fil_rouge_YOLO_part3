@@ -20,6 +20,7 @@ import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
 import io.swagger.v3.oas.annotations.Operation;
+import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
 
 @RestController
 @RequestMapping("/commandes")
@@ -27,8 +28,11 @@ public class CommandeRest {
 	@Autowired
 	CommandeService service;
 	
+	@Autowired
+	PlatService platService;
+	
 	@Operation(summary = "Liste les commandes",
-		       description = "")
+			description = "")
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
 		List<CommandeDTO> lst = new ArrayList<>();
@@ -71,7 +75,49 @@ public class CommandeRest {
 		service.updateCommande(commandeDto.toEntity());
 		return ResponseEntity.ok(commandeDto);
 	}
+		
+	@PutMapping("/{id}/fermer")
+	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("passee");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
 	
+	@PutMapping("/{id}/prete")
+	public ResponseEntity<Object> updatePrete(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("prete");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
+	
+	@PutMapping("/{id}/payer")
+	public ResponseEntity<Object> updatePayee(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("payee");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
+		
 	@DeleteMapping("{id}")
 	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
