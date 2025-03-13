@@ -8,12 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Builder
 @Table(name = "utilisateurs")
 public class Utilisateur {
 	@Id
@@ -24,7 +28,7 @@ public class Utilisateur {
 	private String prenom;
 	private String telephone;
 	private String email;
-	private String login;
+	private String login; 
 	private String password;
 
 	@OneToOne
@@ -50,7 +54,7 @@ public class Utilisateur {
 	@Override
 	public String toString() {
 		return nom + ", prenom=" + prenom + ", telephone="
-				+ telephone + ", email=" + email + ", login=" + login + ", password=" + password + ", role=" + role
+				+ telephone + ", email=" + email + ", login=" + login + ", password=" + password + ", role=" + role.getLibelle()
 				+ ", restaurant=" + restaurant.getNom() + "]";
 	}
 	

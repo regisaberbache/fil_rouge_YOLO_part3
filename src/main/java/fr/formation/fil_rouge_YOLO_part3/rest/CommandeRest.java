@@ -19,6 +19,7 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
+import io.swagger.v3.oas.annotations.Operation;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
 
 @RestController
@@ -30,6 +31,8 @@ public class CommandeRest {
 	@Autowired
 	PlatService platService;
 	
+	@Operation(summary = "Liste les commandes",
+			description = "")
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
 		List<CommandeDTO> lst = new ArrayList<>();
