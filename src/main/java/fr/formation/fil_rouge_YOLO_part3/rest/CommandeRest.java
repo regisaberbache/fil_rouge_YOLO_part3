@@ -48,9 +48,8 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@PutMapping("{id}")
-	public ResponseEntity getById(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
 			commande = service.getCommandeById(id);
