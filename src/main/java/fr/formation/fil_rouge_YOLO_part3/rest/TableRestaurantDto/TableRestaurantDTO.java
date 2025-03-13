@@ -5,11 +5,13 @@ import java.util.stream.Collectors;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TableRestaurantDTO {
 	private Integer idTableRestaurant;
 	private Integer nbPlaces;
