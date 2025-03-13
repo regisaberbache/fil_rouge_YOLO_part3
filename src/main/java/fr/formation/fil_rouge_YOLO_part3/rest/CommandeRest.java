@@ -72,7 +72,49 @@ public class CommandeRest {
 		service.updateCommande(commandeDto.toEntity());
 		return ResponseEntity.ok(commandeDto);
 	}
+		
+	@PutMapping("/{id}/fermer")
+	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("passee");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
 	
+	@PutMapping("/{id}/prete")
+	public ResponseEntity<Object> updatePrete(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("prete");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
+	
+	@PutMapping("/{id}/payer")
+	public ResponseEntity<Object> updatePayee(@PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+	        commande.setStatut("payee");
+	        service.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(new CommandeDTO(commande));
+	}
+		
 	@DeleteMapping("{id}")
 	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;

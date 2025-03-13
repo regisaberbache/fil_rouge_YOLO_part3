@@ -16,4 +16,5 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer> {
 	
 	@Query("FROM Commande c WHERE c.statut = :statut")
 	List<Commande> findAllCommandeByCommandeStatut(@Param("statut") String statut);
+	
 }
