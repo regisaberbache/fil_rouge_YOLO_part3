@@ -41,4 +41,17 @@ public class TableRestaurantDTO {
 		return tableRestaurant;
 	}
 	
+	public TableRestaurantDTO(TableRestaurant tableRestaurant, List<ReservationDTO> reservationsFiltrees) {
+	    this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();
+	    this.nbPlaces = tableRestaurant.getNbPlaces();
+	    this.numeroTable = tableRestaurant.getNumeroTable();
+	    if (tableRestaurant.getRestaurant() != null && tableRestaurant.getRestaurant().getIdRestaurant() != null) {
+	        this.idRestaurant = tableRestaurant.getRestaurant().getIdRestaurant();
+	    } else {
+	        this.idRestaurant = null;
+	    }
+	    this.reservations = reservationsFiltrees;
+	}
+
+	
 }
