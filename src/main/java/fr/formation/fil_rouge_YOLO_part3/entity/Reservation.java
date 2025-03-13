@@ -17,10 +17,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "reservations")
 public class Reservation {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

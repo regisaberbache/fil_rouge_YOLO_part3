@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/utilisateur")
+@RequestMapping("/utilisateurs")
 public class UtilisateurRest {
 	@Autowired
 	UtilisateurService service;
@@ -47,15 +49,17 @@ public class UtilisateurRest {
 	}
 	
 	@PostMapping
-	public ResponseEntity<UtilisateurDTO> create(@RequestBody UtilisateurDTO utilisateurDto) {
+	public ResponseEntity<UtilisateurDTO> create(@Valid @RequestBody UtilisateurDTO utilisateurDto) throws RestaurantServiceException {
 		// TODO Gérer les exceptions
-		service.createUtilisateur(utilisateurDto.toEntity());
+		Utilisateur utilisateur = service.createUtilisateur(utilisateurDto.toEntity());
+		utilisateurDto.setIdUtilisateur(utilisateur.getIdUtilisateur());
 		return ResponseEntity.ok(utilisateurDto);
 	}
 	
-	@PutMapping
-	public ResponseEntity<UtilisateurDTO> update(@RequestBody UtilisateurDTO utilisateurDto) {
+	@PutMapping("{id}")
+	public ResponseEntity<UtilisateurDTO> update(@Valid @RequestBody UtilisateurDTO utilisateurDto, @PathVariable("id") Integer id) throws RestaurantServiceException {
 		// TODO Gérer les exceptions
+		utilisateurDto.setIdUtilisateur(id);
 		service.updateUtilisateur(utilisateurDto.toEntity());
 		return ResponseEntity.ok(utilisateurDto);
 	}
