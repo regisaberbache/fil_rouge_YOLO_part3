@@ -48,14 +48,14 @@ public class TableRestaurantRest {
 	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
 	    List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
 	    List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
-	        .filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() &&
-	                         table.getReservations().stream()
-	                             .anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
+	        .filter(table -> table.getReservations().stream()
+	        		.anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
 	        .map(table -> {
 	            List<ReservationDTO> reservationsFiltrees = table.getReservations().stream()
 	                .filter(reservation -> "arrivee".equals(reservation.getStatut()))
 	                .map(reservation -> new ReservationDTO(reservation))
 	                .collect(Collectors.toList());
+	            System.out.println();
 	            return new TableRestaurantDTO(table, reservationsFiltrees);
 	        })
 	        .collect(Collectors.toList());
@@ -96,10 +96,17 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(tableRestaurantDto);
 	}
 
-	@PutMapping
-	public ResponseEntity<TableRestaurantDTO> update(@RequestBody TableRestaurantDTO tableRestaurantDto) {
+	@PutMapping("{id}")
+	public ResponseEntity<Object> update(@RequestBody TableRestaurantDTO tableRestaurantDto, @PathVariable("id") Integer id) {
 		// TODO Gérer les exceptions
-		service.updateTableRestaurant(tableRestaurantDto.toEntity());
+		TableRestaurant tableRestaurant;
+		try {
+			tableRestaurant = service.getTableRestaurantById(id);
+			((Reservation) tableRestaurant.getReservations()).setStatut("arrivee");
+			service.updateTableRestaurant(tableRestaurantDto.toEntity());
+		} catch (TableRestaurantServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+		}
 		return ResponseEntity.ok(tableRestaurantDto);
 	}
 
