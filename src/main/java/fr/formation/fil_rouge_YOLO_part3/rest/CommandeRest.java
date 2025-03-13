@@ -21,6 +21,7 @@ import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeWrapper;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
+import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -68,14 +69,24 @@ public class CommandeRest {
 	@PostMapping
 	public ResponseEntity<CommandeDTO> create(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
-		service.createCommande(commandeWrapper.toEntity(commandeDto));
+		try {
+			service.createCommande(commandeWrapper.toEntity(commandeDto));
+		} catch (ReservationServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return ResponseEntity.ok(commandeDto);
 	}
 	
 	@PutMapping
 	public ResponseEntity<CommandeDTO> update(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
-		service.updateCommande(commandeWrapper.toEntity(commandeDto));
+		try {
+			service.updateCommande(commandeWrapper.toEntity(commandeDto));
+		} catch (ReservationServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return ResponseEntity.ok(commandeDto);
 	}
 		

@@ -27,6 +27,9 @@ public class Reservation {
 	@Column(name="id")
 	private Integer idReservation;
 	
+	@Column(name = "id_tables_restaurant")
+    private Integer idTableRestaurant;
+	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
  
@@ -46,10 +49,9 @@ public class Reservation {
 		this.horaireReservation = horaireReservation;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+		return "Reservation idReservation=" + idReservation + ", Table Restaurant=" + idTableRestaurant + ", nbPersonne=" + nbPersonne + ", statut=" + statut
 				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
 	}
 	
