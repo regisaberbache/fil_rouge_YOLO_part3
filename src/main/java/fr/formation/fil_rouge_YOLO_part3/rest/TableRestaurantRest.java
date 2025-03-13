@@ -1,7 +1,9 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,18 +99,35 @@ public class TableRestaurantRest {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Object> update(@RequestBody TableRestaurantDTO tableRestaurantDto, @PathVariable("id") Integer id) {
-		// TODO Gérer les exceptions
-		TableRestaurant tableRestaurant;
-		try {
-			tableRestaurant = service.getTableRestaurantById(id);
-			((Reservation) tableRestaurant.getReservations()).setStatut("arrivee");
-			service.updateTableRestaurant(tableRestaurantDto.toEntity());
-		} catch (TableRestaurantServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
-		}
-		return ResponseEntity.ok(tableRestaurantDto);
+	public ResponseEntity<Object> update(@PathVariable("id") Integer id) {
+	    try {
+	        TableRestaurant tableRestaurant = service.getTableRestaurantById(id);
+	        
+	        Optional<Reservation> reservationExistante = tableRestaurant.getReservations().stream()
+	            .filter(reservation -> "arrivee".equals(reservation.getStatut())
+	            .findFirst();
+	        if (reservationExistante.isPresent()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body("Cette table est déjà occupée.");
+	        }
+
+	        Reservation nouvelleReservation = new Reservation();
+	        nouvelleReservation.setStatut("arrivee");
+	        nouvelleReservation.setHoraireReservation(LocalDateTime.now());
+	        nouvelleReservation.setNbPersonne(tableRestaurant.getNbPlaces());
+	        
+	        tableRestaurant.getRestaurant().setIdRestaurant(id);
+	        tableRestaurant.getReservations().add(nouvelleReservation);
+	        
+
+	        service.updateTableRestaurant(tableRestaurant);
+	        return ResponseEntity.ok("Table " + id + " mise à jour avec une nouvelle réservation.");
+
+	    } catch (TableRestaurantServiceException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Identifiant non trouvé.");
+	    }
 	}
+
 
 	@DeleteMapping("{id}")
 	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {

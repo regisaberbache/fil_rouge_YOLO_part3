@@ -3,6 +3,7 @@ package fr.formation.fil_rouge_YOLO_part3.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,8 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer> {
 	
 	@Query("FROM Commande c WHERE c.statut = :statut")
 	List<Commande> findAllCommandeByCommandeStatut(@Param("statut") String statut);
+	
+	@Query(value = "SELECT id_reservations FROM commandes WHERE id = :id", nativeQuery = true)
+	Integer findReservationIdByCommandeId(@Param("id") Integer idCommande);
+
 }

@@ -25,6 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
+
 	public Restaurant getById(Integer id) throws RestaurantServiceException {
 		Optional<Restaurant> restaurant = repo.findById(id);
 		if(restaurant.isPresent()) {

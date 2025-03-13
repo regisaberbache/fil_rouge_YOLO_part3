@@ -44,10 +44,15 @@ public class CommandeServiceImpl implements CommandeService {
 	public void updateCommande(Commande commande) {
 		repo.save(commande);
 	}
-
+	
 	@Override
 	public void deleteCommande(Commande commande) {
 		repo.delete(commande);
+	}
+
+	@Override
+	public Integer getIdReservationByIdCommande(Integer idCommande) {
+		return repo.findReservationIdByCommandeId(idCommande);
 	}
 
 }
