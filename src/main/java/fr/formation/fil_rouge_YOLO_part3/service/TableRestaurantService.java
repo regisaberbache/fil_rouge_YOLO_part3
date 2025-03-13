@@ -5,10 +5,10 @@ import java.util.List;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 
 public interface TableRestaurantService {
-	TableRestaurant createTableRestaurant(TableRestaurant tableRestaurant);
+	void createTableRestaurant(TableRestaurant tableRestaurant);
 	List<TableRestaurant> getAllTableRestaurants();
-	TableRestaurant getTableRestaurantById(Integer id);
-	TableRestaurant updateTableRestaurant(TableRestaurant tableRestaurant);
-	TableRestaurant deleteTableRestaurant(TableRestaurant tableRestaurant);
+	TableRestaurant getTableRestaurantById(Integer id) throws TableRestaurantServiceException;
+	void updateTableRestaurant(TableRestaurant tableRestaurant);
+	void deleteTableRestaurant(TableRestaurant tableRestaurant);
 
 }

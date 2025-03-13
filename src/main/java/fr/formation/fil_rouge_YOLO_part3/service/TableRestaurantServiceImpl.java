@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,34 @@ public class TableRestaurantServiceImpl implements TableRestaurantService {
 	TableRestaurantRepository repo;
 
 	@Override
-	public TableRestaurant createTableRestaurant(TableRestaurant tableRestaurant) {
-		// TODO Auto-generated method stub
-		return null;
+	public void createTableRestaurant(TableRestaurant tableRestaurant) {
+		repo.save(tableRestaurant);
 	}
 
 	@Override
 	public List<TableRestaurant> getAllTableRestaurants() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 	@Override
-	public TableRestaurant getTableRestaurantById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public TableRestaurant getTableRestaurantById(Integer id) throws TableRestaurantServiceException {
+		Optional<TableRestaurant> tableRestaurant = repo.findById(id);
+		if(tableRestaurant.isPresent()) {
+			return tableRestaurant.get();
+		}
+		else {
+			throw new TableRestaurantServiceException("Cet identifiant n'existe pas");
+		}
 	}
 
 	@Override
-	public TableRestaurant updateTableRestaurant(TableRestaurant tableRestaurant) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateTableRestaurant(TableRestaurant tableRestaurant) {
+		repo.save(tableRestaurant);
 	}
 
 	@Override
-	public TableRestaurant deleteTableRestaurant(TableRestaurant tableRestaurant) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteTableRestaurant(TableRestaurant tableRestaurant) {
+		repo.delete(tableRestaurant);
 	}
 	
 	
