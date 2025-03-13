@@ -16,34 +16,55 @@ public class UtilisateurWrapper {
         this.restaurantService = restaurantService;
     }
 
-    /**
-     * Wraps an Utilisateur entity into an UtilisateurDTO
-     */
-    public UtilisateurDTO wrap(Utilisateur utilisateur) {
+    public UtilisateurDTO toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
-        return new UtilisateurDTO(utilisateur);
+        UtilisateurDTO dto = new UtilisateurDTO();
+        
+        dto.setIdUtilisateur(utilisateur.getIdUtilisateur());
+        dto.setNom(utilisateur.getNom());
+        dto.setPrenom(utilisateur.getPrenom());
+        dto.setEmail(utilisateur.getEmail());
+        dto.setTelephone(utilisateur.getTelephone());
+        dto.setLoginDto(utilisateur.getLogin());
+        dto.setPasswordDto(utilisateur.getPassword());
+        if (utilisateur.getRole() != null) {
+        	dto.setRoleDto(utilisateur.getRole());
+        }
+        if (utilisateur.getRestaurant() != null) {
+        	dto.setIdRestaurant(utilisateur.getRestaurant().getIdRestaurant());
+        	dto.setNomRestaurant(utilisateur.getRestaurant().getNom());
+        }
+        
+        return dto;
     }
 
-    /**
-     * Unwraps an UtilisateurDTO into an Utilisateur entity
-     */
-    public Utilisateur unwrap(UtilisateurDTO dto) throws RestaurantServiceException {
+    public Utilisateur toEntity(UtilisateurDTO dto) throws RestaurantServiceException {
         if (dto == null) {
             return null;
         }
-        Utilisateur utilisateur = dto.toEntity();
-        // Set the restaurant using the service
+        
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setIdUtilisateur(dto.getIdUtilisateur());
+        utilisateur.setNom(dto.getNom());
+        utilisateur.setPrenom(dto.getPrenom());
+        utilisateur.setEmail(dto.getEmail());
+        utilisateur.setTelephone(dto.getTelephone());
+        utilisateur.setLogin(dto.getLoginDto());
+        utilisateur.setPassword(dto.getPasswordDto());
+        if (dto.getRoleDto() != null && !"".equalsIgnoreCase(dto.getRoleDto().getIdRole().toString()) 
+            && !"".equalsIgnoreCase(dto.getRoleDto().getLibelle())) {            
+            utilisateur.setRole(dto.getRoleDto());            
+        }
+        
         if (dto.getIdRestaurant() != null && !"".equalsIgnoreCase(dto.getIdRestaurant().toString())) {
             utilisateur.setRestaurant(restaurantService.getById(dto.getIdRestaurant()));
         }
+        
         return utilisateur;
     }
 
-    /**
-     * Updates an existing Utilisateur with data from UtilisateurDTO
-     */
     public Utilisateur updateEntity(Utilisateur existingUtilisateur, UtilisateurDTO dto) 
             throws RestaurantServiceException {
         if (existingUtilisateur == null || dto == null) {
@@ -72,11 +93,5 @@ public class UtilisateurWrapper {
 
         return existingUtilisateur;
     }
-
-    /**
-     * Creates a new UtilisateurDTO with default values
-     */
-    public UtilisateurDTO createDefault() {
-        return new UtilisateurDTO();
-    }
+   
 }
