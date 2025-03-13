@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -22,8 +23,9 @@ public class Commande {
 	@Column(name="id")
 	private Integer idCommande;
 	
-	@Column(name = "id_reservations")
-    private Integer idReservation;
+	@ManyToOne
+	@JoinColumn(name="id_reservations")
+	private Reservation reservation;
 	
 	private String statut;
 	
