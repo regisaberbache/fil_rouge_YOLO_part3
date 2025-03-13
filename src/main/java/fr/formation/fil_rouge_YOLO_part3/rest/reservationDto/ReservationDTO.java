@@ -18,7 +18,6 @@ public class ReservationDTO {
 	private LocalDateTime horaireReservation;
 	private UtilisateurDTO utilisateur;
 
-	
 	public ReservationDTO(Reservation reservation) {
 		this.idReservation = reservation.getIdReservation();
 		this.nbPersonne = reservation.getNbPersonne();

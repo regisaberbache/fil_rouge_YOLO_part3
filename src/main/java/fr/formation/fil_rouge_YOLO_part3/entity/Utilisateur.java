@@ -1,5 +1,12 @@
 package fr.formation.fil_rouge_YOLO_part3.entity;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "utilisateurs")
-public class Utilisateur {
+public class Utilisateur implements UserDetails {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
@@ -57,6 +65,16 @@ public class Utilisateur {
 		return nom + ", prenom=" + prenom + ", telephone="
 				+ telephone + ", email=" + email + ", login=" + login + ", password=" + password + ", role=" + role.getLibelle()
 				+ ", restaurant=" + restaurant.getNom() + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Arrays.asList(new SimpleGrantedAuthority(role.getLibelle()));
+	}
+
+	@Override
+	public String getUsername() {
+		return login;
 	}
 	
 	

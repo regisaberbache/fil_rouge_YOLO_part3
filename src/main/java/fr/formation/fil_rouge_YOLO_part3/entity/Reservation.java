@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +39,6 @@ public class Reservation {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
-	
-	@OneToOne
-	@JoinColumn(name="id_reservations")
-	private Commande commande;
 	
 	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
 		this.nbPersonne = nbPersonne;

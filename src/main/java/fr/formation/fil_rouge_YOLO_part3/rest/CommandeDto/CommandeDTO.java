@@ -19,6 +19,5 @@ public class CommandeDTO {
 	private String statut;
 	private Integer idReservation;
 	private List<LigneCommande> lignes;
-	
 
 }
