@@ -15,8 +15,12 @@ public class UtilisateurWrapper {
     public UtilisateurWrapper(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
+    
+    public UtilisateurWrapper() {
+        this.restaurantService = null;
+    }
 
-    public UtilisateurDTO toDto(Utilisateur utilisateur) {
+	public UtilisateurDTO toDto(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }

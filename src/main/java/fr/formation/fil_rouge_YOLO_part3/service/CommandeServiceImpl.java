@@ -50,4 +50,9 @@ public class CommandeServiceImpl implements CommandeService {
 		repo.delete(commande);
 	}
 
+	@Override
+	public Integer getIdReservationByIdCommande(Integer idCommande) {
+		return repo.findReservationIdByCommandeId(idCommande);
+	}
+
 }

@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeWrapper;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
-import io.swagger.v3.oas.annotations.Operation;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/commandes")
@@ -30,6 +31,8 @@ public class CommandeRest {
 	
 	@Autowired
 	PlatService platService;
+	@Autowired
+	CommandeWrapper  commandeWrapper;
 	
 	@Operation(summary = "Liste les commandes",
 			description = "")
@@ -37,7 +40,7 @@ public class CommandeRest {
 	public ResponseEntity<List<CommandeDTO>> getAll() {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : service.getAllCommandes()) {
-			lst.add(new CommandeDTO(commande));
+			lst.add( commandeWrapper.toDTO(commande));
 		}
 		return ResponseEntity.ok(lst);
 	}
@@ -46,7 +49,7 @@ public class CommandeRest {
 	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : service.getAllCommandesByStatut(statut)) {
-			lst.add(new CommandeDTO(commande));
+			lst.add(commandeWrapper.toDTO(commande));
 		}
 		return ResponseEntity.ok(lst);
 	}
@@ -59,20 +62,20 @@ public class CommandeRest {
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
-		return ResponseEntity.ok(new CommandeDTO(commande));
+		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 	
 	@PostMapping
 	public ResponseEntity<CommandeDTO> create(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
-		service.createCommande(commandeDto.toEntity());
+		service.createCommande(commandeWrapper.toEntity(commandeDto));
 		return ResponseEntity.ok(commandeDto);
 	}
 	
 	@PutMapping
 	public ResponseEntity<CommandeDTO> update(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
-		service.updateCommande(commandeDto.toEntity());
+		service.updateCommande(commandeWrapper.toEntity(commandeDto));
 		return ResponseEntity.ok(commandeDto);
 	}
 		
@@ -87,7 +90,7 @@ public class CommandeRest {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 
-		return ResponseEntity.ok(new CommandeDTO(commande));
+		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 	
 	@PutMapping("/{id}/prete")
@@ -101,7 +104,7 @@ public class CommandeRest {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 
-		return ResponseEntity.ok(new CommandeDTO(commande));
+		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 	
 	@PutMapping("/{id}/payer")
@@ -115,7 +118,7 @@ public class CommandeRest {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 
-		return ResponseEntity.ok(new CommandeDTO(commande));
+		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 		
 	@DeleteMapping("{id}")
@@ -127,6 +130,6 @@ public class CommandeRest {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 		service.deleteCommande(commande);
-		return ResponseEntity.ok(new CommandeDTO(commande));
+		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 }
