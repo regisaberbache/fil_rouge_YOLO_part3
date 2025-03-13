@@ -22,6 +22,9 @@ public class Commande {
 	@Column(name="id")
 	private Integer idCommande;
 	
+	@Column(name = "id_reservations")
+    private Integer idReservation;
+	
 	private String statut;
 	
 	@OneToMany

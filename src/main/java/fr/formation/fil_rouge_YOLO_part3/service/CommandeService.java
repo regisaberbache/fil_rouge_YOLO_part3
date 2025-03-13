@@ -11,7 +11,8 @@ public interface CommandeService {
 	Commande getCommandeById(Integer id) throws CommandeServiceException;
 	void updateCommande(Commande commande);
 	void deleteCommande(Commande commande);
-	Integer getIdReservationByIdCommande(Integer idCommande);
+//	Integer getIdReservationByIdCommande(Integer idCommande);
+//	Integer getIdTableByIdReservation(Integer idReservation);
 
 
 }
