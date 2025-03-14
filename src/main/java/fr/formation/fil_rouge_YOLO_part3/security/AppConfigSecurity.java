@@ -33,16 +33,16 @@ public class AppConfigSecurity {
 			auth
 					// accueil (tout le monde y a accès)
 					.requestMatchers("/accueil").permitAll()
+					.requestMatchers("/login").permitAll()
 					.requestMatchers("/auth").permitAll()
-
-					// Permettre aux Admins et Serveurs seulement
-					.requestMatchers(HttpMethod.GET, "/tables").hasAnyAuthority("Admin","Serveur")
 					
-					// Permettre aux Admins seulement
-					.requestMatchers(HttpMethod.GET, "/commandes").hasAuthority("Admin")
-
-					// Permettre aux Serveurs seulement
-					.requestMatchers(HttpMethod.GET, "/utilisateurs").hasAuthority("Serveur")
+					// Permettre l'accès à tous les rôles présents dans la table rôle
+					.requestMatchers(HttpMethod.GET, "/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
+					.requestMatchers(HttpMethod.GET, "/commandes/**").hasAnyAuthority("Admin","Serveur","Chef")
+					.requestMatchers(HttpMethod.GET, "/reservations/**").hasAnyAuthority("Admin","Serveur","Chef")
+					
+					// Permettre à l'Admin seulement
+					.requestMatchers(HttpMethod.GET, "/utilisateurs").hasAuthority("Admin")
 
 					// Toutes autres url et méthodes HTTP ne sont pas permises
 					.anyRequest().denyAll();
