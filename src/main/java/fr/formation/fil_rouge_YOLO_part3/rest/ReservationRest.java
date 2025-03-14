@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,16 +29,18 @@ public class ReservationRest {
 	@GetMapping
 	public ResponseEntity<List<ReservationDTO>> getAllReservations() {
 		List<ReservationDTO> listeReservations = service.getAllReservations()
-				.stream().map(r-> new ReservationDTO(r))
+				.stream().map(reservation -> new ReservationDTO(reservation))
 				.toList();
 		return ResponseEntity.ok(listeReservations);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> getReservationById(@PathVariable("id") Integer id) throws ReservationServiceException {
-		Reservation reservation;
+		List<ReservationDTO> listeReservations = service.getAllReservations().stream()
+				.map(reservation -> new ReservationDTO(reservation))
+				.collect(Collectors.toList());
 		try {
-			reservation = service.getReservationById(id);
+			
 		} catch (ReservationServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
