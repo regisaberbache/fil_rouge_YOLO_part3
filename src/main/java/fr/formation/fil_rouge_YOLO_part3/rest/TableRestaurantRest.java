@@ -58,9 +58,11 @@ public class TableRestaurantRest {
 		}
 		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
 		List<TableRestaurantDTO> tablesNonOccupees = toutesLesTables.stream()
-				.filter(table -> table.getRestaurant() != null).filter(table -> table.getReservations().isEmpty())
+				.filter(table -> table.getRestaurant() != null)
+				.filter(table -> table.getReservations().isEmpty())
 				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table)).collect(Collectors.toList());
+				.map(table -> new TableRestaurantDTO(table))
+				.collect(Collectors.toList());
 		return ResponseEntity.ok(tablesNonOccupees);
 	}
 
