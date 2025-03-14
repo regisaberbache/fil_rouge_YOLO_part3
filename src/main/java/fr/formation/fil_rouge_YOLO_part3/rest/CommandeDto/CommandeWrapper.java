@@ -1,11 +1,10 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto;
 
-import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
-import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
-import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
+import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 
 @Component
 public class CommandeWrapper {

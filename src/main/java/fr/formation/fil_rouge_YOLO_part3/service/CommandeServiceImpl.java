@@ -54,5 +54,4 @@ public class CommandeServiceImpl implements CommandeService {
 	public Integer getIdReservationByIdCommande(Integer idCommande) {
 		return repo.findReservationIdByCommandeId(idCommande);
 	}
-
 }
