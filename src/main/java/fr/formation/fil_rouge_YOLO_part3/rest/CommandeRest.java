@@ -55,6 +55,20 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
+	@GetMapping("{statut}/{id}")
+	public ResponseEntity<Object> getCommandeByStatutAndId(@PathVariable("statut") String statut, @PathVariable("id") Integer id) throws CommandeServiceException {
+		Commande commande;
+		try {
+			commande = service.getCommandeById(id);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+		}
+		if(commande.getStatut().equalsIgnoreCase(statut)) {			
+			return ResponseEntity.ok(commandeWrapper.toDTO(commande));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commande non trouvée pour cet id et ce statut");
+	}
+	
 	@PutMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
@@ -66,6 +80,9 @@ public class CommandeRest {
 		return ResponseEntity.ok(commandeWrapper.toDTO(commande));
 	}
 	
+	//
+	// TODO : créer commande vide ici en prenant numéro de table
+	//
 	@PostMapping
 	public ResponseEntity<CommandeDTO> create(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
@@ -78,6 +95,9 @@ public class CommandeRest {
 		return ResponseEntity.ok(commandeDto);
 	}
 	
+	//
+	// TODO : ajouter plats à commande
+	//
 	@PutMapping
 	public ResponseEntity<CommandeDTO> update(@RequestBody CommandeDTO commandeDto) {
 		// TODO Gérer les exceptions
