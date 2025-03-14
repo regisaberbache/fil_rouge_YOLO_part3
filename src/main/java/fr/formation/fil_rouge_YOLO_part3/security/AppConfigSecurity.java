@@ -40,6 +40,8 @@ public class AppConfigSecurity {
 					.requestMatchers(HttpMethod.GET, "/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.GET, "/commandes/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.GET, "/reservations/**").hasAnyAuthority("Admin","Serveur","Chef")
+					.requestMatchers(HttpMethod.PUT,"/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
+					.requestMatchers(HttpMethod.PUT,"/commandes/**").hasAnyAuthority("Admin","Serveur","Chef")
 					
 					// Permettre à l'Admin seulement
 					.requestMatchers(HttpMethod.GET, "/utilisateurs").hasAuthority("Admin")
