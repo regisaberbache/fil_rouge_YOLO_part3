@@ -7,16 +7,16 @@ import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @Component
-public class UtilisateurWrapper {
+public class UtilisateurMapper {
 
     private final RestaurantService restaurantService;
 
     @Autowired
-    public UtilisateurWrapper(RestaurantService restaurantService) {
+    public UtilisateurMapper(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
     
-    public UtilisateurWrapper() {
+    public UtilisateurMapper() {
         this.restaurantService = null;
     }
 
