@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
+import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
+import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeMapper;
-import fr.formation.fil_rouge_YOLO_part3.rest.PlatDto.PlatDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.LigneCommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
+import fr.formation.fil_rouge_YOLO_part3.service.PlatServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -29,7 +32,10 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired
-	CommandeService service;
+	CommandeService commandeService;
+	
+	@Autowired
+	LigneCommandeService ligneCommandeService;
 	
 	@Autowired
 	PlatService platService;
@@ -42,7 +48,7 @@ public class CommandeRest {
 	@GetMapping
 	public ResponseEntity<List<CommandeDTO>> getAll() {
 		List<CommandeDTO> lst = new ArrayList<>();
-		for (Commande commande : service.getAllCommandes()) {
+		for (Commande commande : commandeService.getAllCommandes()) {
 			lst.add( commandeMapper.toDTO(commande));
 		}
 		return ResponseEntity.ok(lst);
@@ -51,7 +57,7 @@ public class CommandeRest {
 	@GetMapping("{statut}")
 	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
-		for (Commande commande : service.getAllCommandesByStatut(statut)) {
+		for (Commande commande : commandeService.getAllCommandesByStatut(statut)) {
 			lst.add(commandeMapper.toDTO(commande));
 		}
 		return ResponseEntity.ok(lst);
@@ -61,7 +67,7 @@ public class CommandeRest {
 	public ResponseEntity<Object> getCommandeByStatutAndId(@PathVariable("statut") String statut, @PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
@@ -75,7 +81,7 @@ public class CommandeRest {
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
 		}
@@ -95,7 +101,7 @@ public class CommandeRest {
 	public ResponseEntity<CommandeDTO> create(@RequestBody CommandeDTO commandeDto) {
 		commandeDto.setStatut("brouillon");
 		try {
-			Commande commande = service.createCommande(commandeMapper.toEntity(commandeDto));
+			Commande commande = commandeService.createCommande(commandeMapper.toEntity(commandeDto));
 			commandeDto.setIdCommande(commande.getIdCommande());
 		} catch (ReservationServiceException e) {
 			e.printStackTrace();
@@ -105,16 +111,40 @@ public class CommandeRest {
 	
 	
 	// TODO : ajout plat
-	@PutMapping("/{idPlat}/ajouter")
-	public ResponseEntity<CommandeDTO> update(@RequestBody CommandeDTO commandeDto, @RequestBody PlatDTO platDto) {
-		// TODO Gérer les exceptions
+	@PutMapping("/{id}/ajouterplat")
+	public ResponseEntity<Object> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestBody Integer idPlat) {
+		Plat plat = new Plat();
 		try {
-			service.updateCommande(commandeMapper.toEntity(commandeDto));
-		} catch (ReservationServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			plat = platService.getPlatById(idPlat);
+		} catch (PlatServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
-		return ResponseEntity.ok(commandeDto);
+		
+		Commande commande;
+		try {
+			commande = commandeService.getCommandeById(idCommande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+		
+		LigneCommande ligneCommande = null;
+		List<LigneCommande> lignesCommandes = commande.getLignes();
+		if(lignesCommandes != null && plat!= null && lignesCommandes.contains(plat)) {
+			for(LigneCommande ligne : lignesCommandes) {
+				if(plat == ligne.getPlat()) {
+					ligne.setQuantite(ligne.getQuantite() + 1);
+				}
+			}
+		} else {
+			ligneCommande = new LigneCommande();
+			ligneCommande.setPlat(plat);
+			ligneCommande.setQuantite(1);
+			commande.getLignes().add(ligneCommande);
+		}
+		
+		ligneCommandeService.updateLigneCommande(ligneCommande);
+		
+		return ResponseEntity.ok(commande);
 	}
 	
 		
@@ -122,9 +152,9 @@ public class CommandeRest {
 	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 	        commande.setStatut("passee");
-	        service.updateCommande(commande);
+	        commandeService.updateCommande(commande);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
@@ -136,9 +166,9 @@ public class CommandeRest {
 	public ResponseEntity<Object> updatePrete(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 	        commande.setStatut("prete");
-	        service.updateCommande(commande);
+	        commandeService.updateCommande(commande);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
@@ -150,9 +180,9 @@ public class CommandeRest {
 	public ResponseEntity<Object> updatePayee(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 	        commande.setStatut("payee");
-	        service.updateCommande(commande);
+	        commandeService.updateCommande(commande);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
@@ -164,11 +194,11 @@ public class CommandeRest {
 	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws CommandeServiceException {
 		Commande commande;
 		try {
-			commande = service.getCommandeById(id);
+			commande = commandeService.getCommandeById(id);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
-		service.deleteCommande(commande);
+		commandeService.deleteCommande(commande);
 		return ResponseEntity.ok(commandeMapper.toDTO(commande));
 	}
 }
