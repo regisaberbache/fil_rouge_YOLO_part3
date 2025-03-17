@@ -10,5 +10,7 @@ public interface ReservationService {
 	Reservation getReservationById(Integer id) throws ReservationServiceException ;
 	void updateReservation(Reservation reservation);
 	void deleteReservation(Reservation reservation) throws ReservationServiceException;
+	Integer getIdTableRestaurantById(Integer idReservation);
+	
 
 }

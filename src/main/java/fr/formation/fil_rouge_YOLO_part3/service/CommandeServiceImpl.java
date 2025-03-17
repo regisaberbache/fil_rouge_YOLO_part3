@@ -15,8 +15,8 @@ public class CommandeServiceImpl implements CommandeService {
 	CommandeRepository repo;
 
 	@Override
-	public void createCommande(Commande commande) {
-		repo.save(commande);
+	public Commande createCommande(Commande commande) {
+		return repo.save(commande);
 	}
 
 	@Override

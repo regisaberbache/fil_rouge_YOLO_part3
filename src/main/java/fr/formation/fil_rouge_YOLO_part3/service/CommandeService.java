@@ -5,7 +5,7 @@ import java.util.List;
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 
 public interface CommandeService {
-	void createCommande(Commande commande);
+	Commande createCommande(Commande commande);
 	List<Commande> getAllCommandes();
 	List<Commande> getAllCommandesByStatut(String statut);
 	Commande getCommandeById(Integer id) throws CommandeServiceException;

@@ -5,19 +5,16 @@ import org.springframework.stereotype.Component;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
-import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 
 @Component
-public class CommandeWrapper {
+public class CommandeMapper {
     
-	private final ReservationRepository reservationRepository;
 	private final ReservationService reservationService;
 
 	@Autowired
-	public CommandeWrapper(ReservationRepository reservationRepository, ReservationService reservationService) {
-		this.reservationRepository = reservationRepository;
+	public CommandeMapper(ReservationService reservationService) {
 		this.reservationService = reservationService;
 	}
 
@@ -27,8 +24,9 @@ public class CommandeWrapper {
         dto.setStatut(commande.getStatut());
         dto.setLignes(commande.getLignes());
         dto.setIdReservation(commande.getReservation().getIdReservation());
-        Integer idTableRestaurant = reservationRepository.findIdTableRestaurantById(commande.getReservation().getIdReservation());
+        Integer idTableRestaurant = reservationService.getIdTableRestaurantById(commande.getReservation().getIdReservation());
         dto.setIdTableRestaurant(idTableRestaurant);
+        
         return dto;
     }
 
