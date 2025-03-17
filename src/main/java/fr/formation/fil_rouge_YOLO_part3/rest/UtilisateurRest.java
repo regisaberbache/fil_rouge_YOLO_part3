@@ -17,60 +17,69 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurMapper;
+import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/utilisateur")
+@RequestMapping("/utilisateurs")
 public class UtilisateurRest {
-	@Autowired
-	UtilisateurService service;
-	
-	@GetMapping
-	public ResponseEntity<List<UtilisateurDTO>> getAll() {
-		List<UtilisateurDTO> lst = new ArrayList<>();
-		for (Utilisateur utilisateur : service.getAllUtilisateurs()) {
-			lst.add(new UtilisateurDTO(utilisateur));
-		}
-		return ResponseEntity.ok(lst);
-	}
-	
-	@GetMapping("{id}")
-	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
-		Utilisateur utilisateur;
-		try {
-			utilisateur = service.getUtilisateurById(id);
-		} catch (UtilisateurServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
-		}
-		return ResponseEntity.ok(new UtilisateurDTO(utilisateur));
-	}
-	
-	@PostMapping
-	public ResponseEntity<UtilisateurDTO> create(@RequestBody UtilisateurDTO utilisateurDto) {
-		// TODO Gérer les exceptions
-		service.createUtilisateur(utilisateurDto.toEntity());
-		return ResponseEntity.ok(utilisateurDto);
-	}
-	
-	@PutMapping
-	public ResponseEntity<UtilisateurDTO> update(@RequestBody UtilisateurDTO utilisateurDto) {
-		// TODO Gérer les exceptions
-		service.updateUtilisateur(utilisateurDto.toEntity());
-		return ResponseEntity.ok(utilisateurDto);
-	}
-	
-	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws UtilisateurServiceException {
-		Utilisateur utilisateur;
-		try {
-			utilisateur = service.getUtilisateurById(id);
-		} catch (UtilisateurServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
-		service.deleteUtilisateur(utilisateur);
-		return ResponseEntity.ok(new UtilisateurDTO(utilisateur));
-	}
-	
-	
+
+    @Autowired
+    private UtilisateurService service;
+
+    @Autowired
+    private UtilisateurMapper utilisateurMapper;
+
+    @GetMapping
+    public ResponseEntity<List<UtilisateurDTO>> getAll() {
+        List<UtilisateurDTO> lst = new ArrayList<>();
+        for (Utilisateur utilisateur : service.getAllUtilisateurs()) {
+            lst.add(utilisateurMapper.toDto(utilisateur));
+        }
+        return ResponseEntity.ok(lst);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
+        try {
+            Utilisateur utilisateur = service.getUtilisateurById(id);
+            return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
+        } catch (UtilisateurServiceException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<UtilisateurDTO> create(@Valid @RequestBody UtilisateurDTO utilisateurDto) 
+            throws RestaurantServiceException {
+        Utilisateur utilisateur = service.createUtilisateur(utilisateurMapper.toEntity(utilisateurDto));
+		return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> update(@Valid @RequestBody UtilisateurDTO utilisateurDto, 
+            @PathVariable("id") Integer id) throws RestaurantServiceException {
+        try {
+            Utilisateur existingUtilisateur = service.getUtilisateurById(id);
+            Utilisateur updatedUtilisateur = utilisateurMapper.updateEntity(existingUtilisateur, utilisateurDto);
+            service.updateUtilisateur(updatedUtilisateur);
+            return ResponseEntity.ok(utilisateurMapper.toDto(updatedUtilisateur));
+        } catch (UtilisateurServiceException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws UtilisateurServiceException {
+        try {
+            Utilisateur utilisateur = service.getUtilisateurById(id);
+            service.deleteUtilisateur(utilisateur);
+            return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
+        } catch (UtilisateurServiceException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

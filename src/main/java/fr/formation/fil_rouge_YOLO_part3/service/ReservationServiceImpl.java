@@ -15,8 +15,10 @@ public class ReservationServiceImpl implements ReservationService {
 	ReservationRepository repo;
 
 	@Override
+
 	public void createReservation(Reservation reservation) {
 		repo.save(reservation);
+
 	}
 
 	@Override
@@ -43,6 +45,11 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public void deleteReservation(Reservation reservation) throws ReservationServiceException {
 		repo.delete(reservation);
+	}
+
+	@Override
+	public Integer getIdTableRestaurantById(Integer idReservation) {
+		return repo.findIdTableRestaurantById(idReservation);
 	}
 
 }

@@ -15,8 +15,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	UtilisateurRepository repo;
 
 	@Override
-	public void createUtilisateur(Utilisateur utilisateur) {
-		repo.save(utilisateur);
+	public Utilisateur createUtilisateur(Utilisateur utilisateur) {
+		return repo.save(utilisateur);
 	}
 
 	@Override
@@ -45,6 +45,4 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		repo.delete(utilisateur);
 	}
 	
-	
-
 }

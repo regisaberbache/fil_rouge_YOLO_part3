@@ -15,13 +15,18 @@ public class CommandeServiceImpl implements CommandeService {
 	CommandeRepository repo;
 
 	@Override
-	public void createCommande(Commande commande) {
-		repo.save(commande);
+	public Commande createCommande(Commande commande) {
+		return repo.save(commande);
 	}
 
 	@Override
 	public List<Commande> getAllCommandes() {
 		return repo.findAll();
+	}
+	
+	@Override
+	public List<Commande> getAllCommandesByStatut(String statut) {
+		return repo.findAllCommandeByCommandeStatut(statut);
 	}
 
 	@Override
@@ -39,10 +44,20 @@ public class CommandeServiceImpl implements CommandeService {
 	public void updateCommande(Commande commande) {
 		repo.save(commande);
 	}
-
+	
 	@Override
 	public void deleteCommande(Commande commande) {
 		repo.delete(commande);
 	}
+
+//	@Override
+//	public Integer getIdReservationByIdCommande(Integer idCommande) {
+//		return repo.findReservationIdByCommandeId(idCommande);
+//	}
+//
+//	@Override
+//	public Integer getIdTableByIdReservation(Integer idReservation) {
+//		return repo.findTableIdByReservationId(idReservation);
+//	}
 
 }

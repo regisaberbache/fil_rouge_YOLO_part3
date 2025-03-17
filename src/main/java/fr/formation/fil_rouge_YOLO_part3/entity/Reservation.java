@@ -17,15 +17,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "reservations")
 public class Reservation {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer idReservation;
+	
+	@Column(name = "id_tables_restaurant")
+    private Integer idTableRestaurant;
+	
+//	@ManyToOne
+//	@JoinColumn(name="id_tables_restaurant")
+//	private TableRestaurant tableRestaurant;
 	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
@@ -39,14 +46,12 @@ public class Reservation {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
-
-
+	
 	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
 		this.nbPersonne = nbPersonne;
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
 	}
-
 
 	@Override
 	public String toString() {
