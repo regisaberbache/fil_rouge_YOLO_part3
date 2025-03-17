@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 
@@ -23,10 +24,9 @@ public class CommandeMapper {
         dto.setIdCommande(commande.getIdCommande());
         dto.setStatut(commande.getStatut());
         dto.setLignes(commande.getLignes());
-        dto.setIdReservation(commande.getReservation().getIdReservation());
         Integer idTableRestaurant = reservationService.getIdTableRestaurantById(commande.getReservation().getIdReservation());
         dto.setIdTableRestaurant(idTableRestaurant);
-        
+        dto.setReservationDto(new ReservationDTO(commande.getReservation()));
         return dto;
     }
 
@@ -35,7 +35,7 @@ public class CommandeMapper {
         commande.setIdCommande(dto.getIdCommande());
         commande.setStatut(dto.getStatut());
         commande.setLignes(dto.getLignes());
-        Reservation reservation = reservationService.getReservationById(dto.getIdReservation());
+        Reservation reservation = reservationService.getReservationById(dto.getReservationDto().getIdReservation());
         commande.setReservation(reservation);
         return commande;
     }
