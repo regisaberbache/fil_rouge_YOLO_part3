@@ -136,6 +136,12 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(tableRestaurantDto);
 	}
 
+	@PutMapping
+	public ResponseEntity<TableRestaurantDTO> update(@RequestBody TableRestaurantDTO tableRestaurantDto) throws TableRestaurantServiceException {
+		// TODO Gérer les exceptions
+		service.updateTableRestaurant(tableRestaurantDto.toEntity());
+		return ResponseEntity.ok(tableRestaurantDto);
+	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<Object> updateTableStatutToOccupees(@PathVariable("id") Integer id) {
@@ -185,7 +191,7 @@ public class TableRestaurantRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws TableRestaurantServiceException {
 		TableRestaurant tableRestaurant;
 		try {
 			tableRestaurant = service.getTableRestaurantById(id);
