@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +25,7 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
@@ -67,19 +69,30 @@ public class TableRestaurantRest {
 	}
 
 	@GetMapping("libres/{id}")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesLibres(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<TableRestaurantLibreDTO>> getTablesLibres(@PathVariable("id") Integer id) {
 		Restaurant restaurant;
 		try {
 			restaurant = restaurantService.getById(id);
 		} catch (RestaurantServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesLibres = toutesLesTables.stream().filter(table -> table.getRestaurant() != null)
-				.filter(table -> table.getReservations().isEmpty())
-				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table)).collect(Collectors.toList());
-		return ResponseEntity.ok(tablesLibres);
+		List<TableRestaurant> toutesLesTables = restaurant.getTablesRestaurant();
+		List<TableRestaurantLibreDTO> tablesLibresDto = toutesLesTables.stream()
+			    .filter(table -> table.getRestaurant() != null) // Keep tables with a valid restaurant
+			    .filter(table -> {
+			        LocalDateTime nowPlus120 = LocalDateTime.now().plus(120, ChronoUnit.MINUTES);
+			        LocalDateTime nowMinus120 = LocalDateTime.now().minus(120, ChronoUnit.MINUTES);
+			        return table.getReservations() == null || 
+			               table.getReservations().stream()
+			                   .noneMatch(reservation -> 
+			                       reservation.getHoraireReservation().isBefore(nowPlus120) && 
+			                       reservation.getHoraireReservation().isAfter(nowMinus120)
+			                   );
+			    }) // Keep tables with no reservations in the next 120 minutes
+			    .map(table -> new TableRestaurantLibreDTO(table)) // Convert to DTO
+			    .collect(Collectors.toList());
+		
+		return ResponseEntity.ok(tablesLibresDto);
 	}
 
 	@GetMapping("occupees")
