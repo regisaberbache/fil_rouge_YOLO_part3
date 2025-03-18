@@ -20,25 +20,12 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Utiliser la BDD SQLServer YOLOTEST
 class RestaurantServiceImplTest {
 	@Autowired
-	RestaurantService restaurantService;
+	RestaurantServiceImpl restaurantService;
 	
     @BeforeEach
     void setUp() {
     }
-	
-    // Création d'un restaurant
-	@Test
-	void testCreateRestaurant() {
-		Carte carte = new Carte();
-		carte.setIdCarte(1);
-		
-		Restaurant restaurant = new Restaurant("Pizza YOLO Test6", "Adresse Bidon", "email@test.fr", "www.urlImageTest.com", carte);
-		restaurantService.createRestaurant(restaurant);
-		
-		List<Restaurant> restaurants = restaurantService.getAllRestaurants();
-		assertEquals(15, restaurants.size());
-	}
-	
+    
 	//Récupération de tous les restaurants
 	@Test
 	void testGetAllRestaurants() {
@@ -54,7 +41,7 @@ class RestaurantServiceImplTest {
 		assertNotNull(restaurant);
 		assertEquals("Pizza YOLO Nantes", restaurant.getNom());
 	}
-
+	
 	 // Gestion d'une erreur si l'ID n'existe pas
 	@Test
 	void testGetRestaurantById_NotFound() {
@@ -64,6 +51,19 @@ class RestaurantServiceImplTest {
 		assertEquals("Cet identifiant n'existe pas", exception.getMessage());
 	}
 	
+    // Création d'un restaurant
+	@Test
+	void testCreateRestaurant() {
+		Carte carte = new Carte();
+		carte.setIdCarte(1);
+		
+		Restaurant restaurant = new Restaurant("Pizza YOLO Test6", "Adresse Bidon", "email@test.fr", "www.urlImageTest.com", carte);
+		restaurantService.createRestaurant(restaurant);
+		
+		List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+		assertEquals(15, restaurants.size());
+	}
+		
 	//Mise à jour d'un restaurant
 	@Test
 	void testUpdateRestaurant() throws RestaurantServiceException {

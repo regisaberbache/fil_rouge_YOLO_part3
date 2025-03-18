@@ -1,25 +1,25 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
+import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
 	@Autowired
 	ReservationRepository repo;
-
-	@Override
-
-	public void createReservation(Reservation reservation) {
-		repo.save(reservation);
-
-	}
+	
+	@Autowired
+	RestaurantServiceImpl restoService;
+	
 
 	@Override
 	public List<Reservation> getAllReservations() {
@@ -28,13 +28,21 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation getReservationById(Integer id) throws ReservationServiceException {
-		Optional<Reservation> reservation = repo.findById(id);
-		if(reservation.isPresent()) {
-			return reservation.get();
-		}
-		else {
-			throw new ReservationServiceException("Cet identifiant n'existe pas");
-		}
+	    return repo.findById(id)
+	            .orElseThrow(() -> new ReservationServiceException("Réservation non trouvée"));
+	}
+	
+	public List<Reservation> getReservationsByRestaurantId(Integer restaurantId) throws ReservationServiceException, RestaurantServiceException {
+	    Restaurant restaurant = restoService.getById(restaurantId);
+	    return repo.findAll().stream()
+	            .filter(reservation -> reservation.getUtilisateur().getRestaurant().getIdRestaurant().equals(restaurantId))
+	            .sorted(Comparator.comparing(Reservation::getHoraireReservation))
+	            .collect(Collectors.toList());
+	}
+
+	@Override
+	public void createReservation(Reservation reservation) {
+		repo.save(reservation);
 	}
 
 	@Override
@@ -46,10 +54,22 @@ public class ReservationServiceImpl implements ReservationService {
 	public void deleteReservation(Reservation reservation) throws ReservationServiceException {
 		repo.delete(reservation);
 	}
-
+	
 	@Override
 	public Integer getIdTableRestaurantById(Integer idReservation) {
 		return repo.findIdTableRestaurantById(idReservation);
+	}
+	
+	public List<ReservationDTO> getAllReservationsAsDTOs() {
+	    return repo.findAll().stream()
+	            .map(ReservationDTO::new)
+	            .collect(Collectors.toList());
+	}
+
+	public ReservationDTO createReservationFromDTO(ReservationDTO dto) {
+	    Reservation reservation = dto.toEntity();
+	    repo.save(reservation);
+	    return new ReservationDTO(reservation);
 	}
 
 }
