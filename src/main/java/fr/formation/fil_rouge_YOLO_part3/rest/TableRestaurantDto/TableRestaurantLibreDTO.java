@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TableRestaurantLibreDTO {
-	private Integer idTableRestaurant;
-	private Integer nbPlaces;
-	private Integer numeroTable;
 	private Integer idRestaurant;
+	private Integer idTableRestaurant;
+	private Integer numeroTable;
+	private Integer nbPlaces;
 		
 	public TableRestaurantLibreDTO(TableRestaurant tableRestaurant) {
 		this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();
