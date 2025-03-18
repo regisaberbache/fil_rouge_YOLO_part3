@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
@@ -61,12 +59,15 @@ public class CommandeServiceImpl implements CommandeService {
 		repo.delete(commande);
 	}
 
-	public Commande ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
+	public Integer ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
 		Commande commande = getCommandeById(idCommande);
 	    Plat plat = platService.getPlatById(idPlat);
+	    
+	    Integer qtePlatFinale = null;
 		
 	    List<LigneCommande> lignesCommandes = commande.getLignes();
 	    LigneCommande existingLigne = null;
+	    
 	    if (lignesCommandes != null) {
 	        for (LigneCommande ligne : lignesCommandes) {
 	            if (plat.equals(ligne.getPlat())) {
@@ -79,6 +80,7 @@ public class CommandeServiceImpl implements CommandeService {
 	    if (existingLigne != null) {
 	        existingLigne.setQuantite(existingLigne.getQuantite() + 1);
 	        ligneCommandeService.updateLigneCommande(existingLigne);
+	        qtePlatFinale = existingLigne.getQuantite();
 	    } else {
 	        LigneCommande nouvelleLigne = new LigneCommande();
 	        nouvelleLigne.setCommande(commande);;
@@ -89,10 +91,11 @@ public class CommandeServiceImpl implements CommandeService {
 	        }
 	        commande.getLignes().add(nouvelleLigne);
 	        ligneCommandeService.updateLigneCommande(nouvelleLigne);
+	        qtePlatFinale = 1;
 	    }
 	    
 	    repo.save(commande);
-	    return commande;
+	    return qtePlatFinale;
 	}
 	
 }

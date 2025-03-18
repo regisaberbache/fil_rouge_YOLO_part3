@@ -111,7 +111,7 @@ public class CommandeRest {
 	
 	
 	@PutMapping("/{id}/ajouterplat")
-	public ResponseEntity<CommandeDTO> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestParam String plat) throws TableRestaurantServiceException {
+	public ResponseEntity<Integer> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestParam String plat) throws TableRestaurantServiceException {
 		if (plat == null || plat.isBlank()) {
 			return ResponseEntity.badRequest().body(null);
 		}
@@ -123,16 +123,17 @@ public class CommandeRest {
 			return ResponseEntity.badRequest().body(null);
 		}
 		
-		Commande commande = null;
+		Integer qtePlatFinale = null;
+		
 		try {
-			commande = commandeService.ajouterPlatACommande(idCommande, idPlat);
+			qtePlatFinale = commandeService.ajouterPlatACommande(idCommande, idPlat);
 		} catch (CommandeServiceException e) {
 			e.printStackTrace();
 		} catch (PlatServiceException e) {
 			e.printStackTrace();
 		}
 		
-	    return ResponseEntity.ok(commandeMapper.toDTO(commande));
+	    return ResponseEntity.ok(qtePlatFinale);
 	}
 	
 		
