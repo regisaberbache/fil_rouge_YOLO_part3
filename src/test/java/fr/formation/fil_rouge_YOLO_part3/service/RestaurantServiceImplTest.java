@@ -36,7 +36,7 @@ class RestaurantServiceImplTest {
 		restaurantService.createRestaurant(restaurant);
 		
 		List<Restaurant> restaurants = restaurantService.getAllRestaurants();
-		assertEquals(14, restaurants.size());
+		assertEquals(15, restaurants.size());
 	}
 	
 	//Récupération de tous les restaurants
@@ -44,7 +44,7 @@ class RestaurantServiceImplTest {
 	void testGetAllRestaurants() {
 		List<Restaurant> restaurants = restaurantService.getAllRestaurants();
 		assertFalse(restaurants.isEmpty());
-		assertEquals(14, restaurants.size());
+		assertEquals(15, restaurants.size());
 	}
 	
 	// Récupération par ID
