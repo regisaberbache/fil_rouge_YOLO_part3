@@ -136,6 +136,35 @@ public class CommandeRest {
 	    return ResponseEntity.ok(qtePlatFinale);
 	}
 	
+	
+	
+	@PutMapping("/{id}/retirerplat")
+	public ResponseEntity<Integer> retraitPlat(@PathVariable("id") Integer idCommande, @RequestParam String plat) throws TableRestaurantServiceException {
+		if (plat == null || plat.isBlank()) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		
+		Integer idPlat;
+		try {
+			idPlat = Integer.parseInt(plat);
+		} catch (NumberFormatException e) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		
+		Integer qtePlatFinale = null;
+		
+		try {
+			qtePlatFinale = commandeService.retirerPlatACommande(idCommande, idPlat);
+		} catch (CommandeServiceException e) {
+			e.printStackTrace();
+		} catch (PlatServiceException e) {
+			e.printStackTrace();
+		}
+		
+	    return ResponseEntity.ok(qtePlatFinale);
+	}
+	
+	
 		
 	@PutMapping("/{id}/fermer")
 	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {

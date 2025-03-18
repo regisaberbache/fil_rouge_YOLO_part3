@@ -59,6 +59,7 @@ public class CommandeServiceImpl implements CommandeService {
 		repo.delete(commande);
 	}
 
+	@Override
 	public Integer ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
 		Commande commande = getCommandeById(idCommande);
 	    Plat plat = platService.getPlatById(idPlat);
@@ -92,6 +93,42 @@ public class CommandeServiceImpl implements CommandeService {
 	        commande.getLignes().add(nouvelleLigne);
 	        ligneCommandeService.updateLigneCommande(nouvelleLigne);
 	        qtePlatFinale = 1;
+	    }
+	    
+	    repo.save(commande);
+	    return qtePlatFinale;
+	}
+
+	@Override
+	public Integer retirerPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
+		Commande commande = getCommandeById(idCommande);
+	    Plat plat = platService.getPlatById(idPlat);
+	    
+	    Integer qtePlatFinale = null;
+		
+	    List<LigneCommande> lignesCommandes = commande.getLignes();
+	    LigneCommande existingLigne = null;
+	    
+	    if (lignesCommandes != null) {
+	        for (LigneCommande ligne : lignesCommandes) {
+	            if (plat.equals(ligne.getPlat())) {
+	                existingLigne = ligne;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (existingLigne != null && existingLigne.getQuantite() > 0) {
+	        existingLigne.setQuantite(existingLigne.getQuantite() - 1);
+	        qtePlatFinale = existingLigne.getQuantite();
+	        
+	        if (qtePlatFinale == 0) {
+	        	ligneCommandeService.deleteLigneCommande(existingLigne);
+			} else {
+				ligneCommandeService.updateLigneCommande(existingLigne);				
+			}
+	        
+	        
 	    }
 	    
 	    repo.save(commande);

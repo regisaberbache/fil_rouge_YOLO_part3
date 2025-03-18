@@ -12,5 +12,6 @@ public interface CommandeService {
 	void updateCommande(Commande commande);
 	void deleteCommande(Commande commande);
 	Integer ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException;
+	Integer retirerPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException;
 
 }
