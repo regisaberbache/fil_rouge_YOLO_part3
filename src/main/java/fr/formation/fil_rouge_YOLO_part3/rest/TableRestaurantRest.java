@@ -28,6 +28,7 @@ import fr.formation.fil_rouge_YOLO_part3.rest.DemandeResaDto.DemandeResaDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
@@ -42,6 +43,9 @@ public class TableRestaurantRest {
 	@Autowired
 	RestaurantService restaurantService;
 
+	@Autowired
+	ReservationService reservationService;
+
 	@GetMapping
 	public ResponseEntity<List<TableRestaurantDTO>> getAll() {
 		List<TableRestaurantDTO> lst = new ArrayList<>();
@@ -50,23 +54,31 @@ public class TableRestaurantRest {
 		}
 		return ResponseEntity.ok(lst);
 	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("id") Integer id) {
-		Restaurant restaurant;
-		try {
-			restaurant = restaurantService.getById(id);
-		} catch (RestaurantServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesNonOccupees = toutesLesTables.stream()
-				.filter(table -> table.getRestaurant() != null)
-				.filter(table -> table.getReservations().isEmpty())
-				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table))
-				.collect(Collectors.toList());
-		return ResponseEntity.ok(tablesNonOccupees);
+	
+	
+	
+	@GetMapping("{idRestau}")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("idRestau") Integer id) {
+	    LocalDateTime plus120 = LocalDateTime.now().plus(120, ChronoUnit.MINUTES);
+	    LocalDateTime minus120 = LocalDateTime.now().minus(120, ChronoUnit.MINUTES);
+	            
+	    List<TableRestaurant> tablesNonOccupees = service.getAvailableTablesFromRestaurant(minus120, plus120, id);        
+	    List<TableRestaurant> tablesNonOccupeesFutures = tablesNonOccupees;
+	    
+	    for(TableRestaurant table : tablesNonOccupeesFutures) {
+	        List<Reservation> resas = table.getReservations();
+	        table.setReservations(
+	            resas.stream()
+	                .filter(resa -> !resa.getHoraireReservation().isBefore(minus120))
+	                .collect(Collectors.toList())
+	        );
+	    }
+	    
+	    List<TableRestaurantDTO> tablesNonOccupeesFuturesDto = tablesNonOccupeesFutures.stream()
+	            .map(table -> new TableRestaurantDTO(table))
+	            .collect(Collectors.toList());
+	    
+	    return ResponseEntity.ok(tablesNonOccupeesFuturesDto);
 	}
 	
 	

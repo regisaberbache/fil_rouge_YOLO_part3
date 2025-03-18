@@ -1,5 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,5 +52,12 @@ public class ReservationServiceImpl implements ReservationService {
 	public Integer getIdTableRestaurantById(Integer idReservation) {
 		return repo.findIdTableRestaurantById(idReservation);
 	}
+	
+	@Override
+	public List<Reservation> getFutureReservationsFromRestaurant(LocalDateTime horaire, Integer idRestaurant) {
+		return repo.findFutureReservationsFromRestaurant(LocalDateTime.now(), idRestaurant);
+	}
+
+
 
 }

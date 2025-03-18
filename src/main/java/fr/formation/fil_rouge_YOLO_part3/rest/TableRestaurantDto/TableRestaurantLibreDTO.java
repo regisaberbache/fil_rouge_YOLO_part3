@@ -1,7 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
