@@ -39,7 +39,7 @@ public class Restaurant {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_restaurants")
-	private List<Horaire> horaires;
+	private List<Horaire> horaires; 
 
 	public Restaurant(String nom, String adresse, String email, String url_image, Carte carte) {
 		this.nom = nom;

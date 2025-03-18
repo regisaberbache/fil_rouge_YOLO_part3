@@ -9,8 +9,8 @@ public interface TableRestaurantService {
 	void createTableRestaurant(TableRestaurant tableRestaurant);
 	List<TableRestaurant> getAllTableRestaurants();
 	TableRestaurant getTableRestaurantById(Integer id) throws TableRestaurantServiceException;
-	void updateTableRestaurant(TableRestaurant tableRestaurant);
-	void deleteTableRestaurant(TableRestaurant tableRestaurant);
 	List<TableRestaurant> getAvailableTablesFromRestaurant(LocalDateTime startTime, LocalDateTime endTime, Integer restaurantId);
+	void updateTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException;
+	void deleteTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException;
 
 }
