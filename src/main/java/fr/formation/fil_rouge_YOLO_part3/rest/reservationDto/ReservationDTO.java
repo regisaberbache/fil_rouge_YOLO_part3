@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
-import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurWrapper;
+import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class ReservationDTO {
 
 	
 	public ReservationDTO(Reservation reservation) {
-		UtilisateurWrapper utilisateurWrapper = new UtilisateurWrapper();
+		UtilisateurMapper utilisateurMapper = new UtilisateurMapper();
 		
 		this.idReservation = reservation.getIdReservation();
 		this.nbPersonne = reservation.getNbPersonne();

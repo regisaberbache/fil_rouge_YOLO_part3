@@ -3,17 +3,17 @@ package fr.formation.fil_rouge_YOLO_part3.service;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 
+@Sql({"/YOLOTEST_creationTables.sql", "/YOLOTEST_dataset.sql"})
 @SpringBootTest
 class ReservationServiceImplTest implements CommandLineRunner {
 	@Autowired

@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +29,10 @@ public class Reservation {
 	
 	@Column(name = "id_tables_restaurant")
     private Integer idTableRestaurant;
+	
+//	@ManyToOne
+//	@JoinColumn(name="id_tables_restaurant")
+//	private TableRestaurant tableRestaurant;
 	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
@@ -52,7 +55,7 @@ public class Reservation {
 
 	@Override
 	public String toString() {
-		return "Reservation idReservation=" + idReservation + ", Table Restaurant=" + idTableRestaurant + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
 				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
 	}
 	

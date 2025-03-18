@@ -47,4 +47,9 @@ public class ReservationServiceImpl implements ReservationService {
 		repo.delete(reservation);
 	}
 
+	@Override
+	public Integer getIdTableRestaurantById(Integer idReservation) {
+		return repo.findIdTableRestaurantById(idReservation);
+	}
+
 }
