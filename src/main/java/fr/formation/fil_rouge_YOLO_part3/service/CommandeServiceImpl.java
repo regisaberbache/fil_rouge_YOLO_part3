@@ -1,18 +1,29 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
+import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
+import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
 import fr.formation.fil_rouge_YOLO_part3.repository.CommandeRepository;
 
 @Service
 public class CommandeServiceImpl implements CommandeService {
 	@Autowired
 	CommandeRepository repo;
+	
+	@Autowired
+	PlatService platService;
+	
+	@Autowired
+	LigneCommandeService ligneCommandeService;
 
 	@Override
 	public Commande createCommande(Commande commande) {
@@ -50,14 +61,38 @@ public class CommandeServiceImpl implements CommandeService {
 		repo.delete(commande);
 	}
 
-//	@Override
-//	public Integer getIdReservationByIdCommande(Integer idCommande) {
-//		return repo.findReservationIdByCommandeId(idCommande);
-//	}
-//
-//	@Override
-//	public Integer getIdTableByIdReservation(Integer idReservation) {
-//		return repo.findTableIdByReservationId(idReservation);
-//	}
+	public Commande ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
+		Commande commande = getCommandeById(idCommande);
+	    Plat plat = platService.getPlatById(idPlat);
+		
+	    List<LigneCommande> lignesCommandes = commande.getLignes();
+	    LigneCommande existingLigne = null;
+	    if (lignesCommandes != null) {
+	        for (LigneCommande ligne : lignesCommandes) {
+	            if (plat.equals(ligne.getPlat())) {
+	                existingLigne = ligne;
+	                break;
+	            }
+	        }
+	    }
 
+	    if (existingLigne != null) {
+	        existingLigne.setQuantite(existingLigne.getQuantite() + 1);
+	        ligneCommandeService.updateLigneCommande(existingLigne);
+	    } else {
+	        LigneCommande nouvelleLigne = new LigneCommande();
+	        nouvelleLigne.setCommande(commande);;
+	        nouvelleLigne.setPlat(plat);
+	        nouvelleLigne.setQuantite(1);
+	        if (lignesCommandes == null) {
+	            commande.setLignes(new ArrayList<>());
+	        }
+	        commande.getLignes().add(nouvelleLigne);
+	        ligneCommandeService.updateLigneCommande(nouvelleLigne);
+	    }
+	    
+	    repo.save(commande);
+	    return commande;
+	}
+	
 }

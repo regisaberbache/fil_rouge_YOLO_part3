@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
-import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
-import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeMapper;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
@@ -112,39 +111,28 @@ public class CommandeRest {
 	
 	// TODO : ajout plat
 	@PutMapping("/{id}/ajouterplat")
-	public ResponseEntity<Object> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestBody Integer idPlat) {
-		Plat plat = new Plat();
-		try {
-			plat = platService.getPlatById(idPlat);
-		} catch (PlatServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	public ResponseEntity<CommandeDTO> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestParam String idplatstring) {
+		if (idplatstring == null || idplatstring.isBlank()) {
+			return ResponseEntity.badRequest().body(null);
 		}
 		
-		Commande commande;
+		Integer idPlat;
 		try {
-			commande = commandeService.getCommandeById(idCommande);
+			idPlat = Integer.parseInt(idplatstring);
+		} catch (NumberFormatException e) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		
+		Commande commande = null;
+		try {
+			commande = commandeService.ajouterPlatACommande(idCommande, idPlat);
 		} catch (CommandeServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			e.printStackTrace();
+		} catch (PlatServiceException e) {
+			e.printStackTrace();
 		}
 		
-		LigneCommande ligneCommande = null;
-		List<LigneCommande> lignesCommandes = commande.getLignes();
-		if(lignesCommandes != null && plat!= null && lignesCommandes.contains(plat)) {
-			for(LigneCommande ligne : lignesCommandes) {
-				if(plat == ligne.getPlat()) {
-					ligne.setQuantite(ligne.getQuantite() + 1);
-				}
-			}
-		} else {
-			ligneCommande = new LigneCommande();
-			ligneCommande.setPlat(plat);
-			ligneCommande.setQuantite(1);
-			commande.getLignes().add(ligneCommande);
-		}
-		
-		ligneCommandeService.updateLigneCommande(ligneCommande);
-		
-		return ResponseEntity.ok(commande);
+	    return ResponseEntity.ok(commandeMapper.toDTO(commande));
 	}
 	
 		
