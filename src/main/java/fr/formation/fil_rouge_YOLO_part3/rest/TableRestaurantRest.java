@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.rest.DemandeResaDto.DemandeResaDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
@@ -67,29 +68,46 @@ public class TableRestaurantRest {
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(tablesNonOccupees);
 	}
-
+	
+	
+	
+	/*
+	 POUR TESTER, mettre dans le body un JSON de type :
+	 
+	  	{
+		"date": "2025-03-18",
+		"heure": "14:30:00",
+		"nbPersonnes": 4
+		}
+	 
+	 */
 	@GetMapping("libres/{id}")
-	public ResponseEntity<List<TableRestaurantLibreDTO>> getTablesLibres(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<TableRestaurantLibreDTO>> getTablesLibres(@PathVariable("id") Integer id, @RequestBody DemandeResaDTO demandeResaDto) {
 		Restaurant restaurant;
 		try {
 			restaurant = restaurantService.getById(id);
 		} catch (RestaurantServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		
+		LocalDateTime horaireDemande = LocalDateTime.of(demandeResaDto.getDate(), demandeResaDto.getHeure());
+		Integer nbPersonnesDemande = demandeResaDto.getNbPersonnes();
+		
 		List<TableRestaurant> toutesLesTables = restaurant.getTablesRestaurant();
 		List<TableRestaurantLibreDTO> tablesLibresDto = toutesLesTables.stream()
-			    .filter(table -> table.getRestaurant() != null) // Keep tables with a valid restaurant
+			    .filter(table -> table.getRestaurant() != null)
+			    .filter(table -> table.getNbPlaces() >= (nbPersonnesDemande - 1))
 			    .filter(table -> {
-			        LocalDateTime nowPlus120 = LocalDateTime.now().plus(120, ChronoUnit.MINUTES);
-			        LocalDateTime nowMinus120 = LocalDateTime.now().minus(120, ChronoUnit.MINUTES);
+			        LocalDateTime plus120 = horaireDemande.plus(120, ChronoUnit.MINUTES);
+			        LocalDateTime minus120 = horaireDemande.minus(120, ChronoUnit.MINUTES);
 			        return table.getReservations() == null || 
 			               table.getReservations().stream()
 			                   .noneMatch(reservation -> 
-			                       reservation.getHoraireReservation().isBefore(nowPlus120) && 
-			                       reservation.getHoraireReservation().isAfter(nowMinus120)
+			                       reservation.getHoraireReservation().isBefore(plus120) && 
+			                       reservation.getHoraireReservation().isAfter(minus120)
 			                   );
-			    }) // Keep tables with no reservations in the next 120 minutes
-			    .map(table -> new TableRestaurantLibreDTO(table)) // Convert to DTO
+			    })
+			    .map(table -> new TableRestaurantLibreDTO(table))
 			    .collect(Collectors.toList());
 		
 		return ResponseEntity.ok(tablesLibresDto);
