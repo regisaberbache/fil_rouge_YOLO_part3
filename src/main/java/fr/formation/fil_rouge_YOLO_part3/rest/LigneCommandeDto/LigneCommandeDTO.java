@@ -16,6 +16,7 @@ public class LigneCommandeDTO {
 	
 	
 	public LigneCommandeDTO(LigneCommande ligneCommande) {
+		this.idLigneCommande = ligneCommande.getIdLigneCommande();
 		this.idPlat = ligneCommande.getPlat().getIdPlat();
 		this.idCommande = ligneCommande.getCommande().getIdCommande();
 		this.quantite = ligneCommande.getQuantite();

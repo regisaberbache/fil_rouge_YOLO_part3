@@ -25,6 +25,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.LigneCommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -45,7 +46,7 @@ public class CommandeRest {
 	@Operation(summary = "Liste les commandes",
 			description = "")
 	@GetMapping
-	public ResponseEntity<List<CommandeDTO>> getAll() {
+	public ResponseEntity<List<CommandeDTO>> getAll() throws TableRestaurantServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : commandeService.getAllCommandes()) {
 			lst.add( commandeMapper.toDTO(commande));
@@ -54,7 +55,7 @@ public class CommandeRest {
 	}
 	
 	@GetMapping("{statut}")
-	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException {
+	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException, TableRestaurantServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : commandeService.getAllCommandesByStatut(statut)) {
 			lst.add(commandeMapper.toDTO(commande));
@@ -63,7 +64,7 @@ public class CommandeRest {
 	}
 	
 	@GetMapping("{statut}/{id}")
-	public ResponseEntity<Object> getCommandeByStatutAndId(@PathVariable("statut") String statut, @PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> getCommandeByStatutAndId(@PathVariable("statut") String statut, @PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);
@@ -77,7 +78,7 @@ public class CommandeRest {
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);
@@ -109,16 +110,15 @@ public class CommandeRest {
 	}
 	
 	
-	// TODO : ajout plat
 	@PutMapping("/{id}/ajouterplat")
-	public ResponseEntity<CommandeDTO> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestParam String idplatstring) {
-		if (idplatstring == null || idplatstring.isBlank()) {
+	public ResponseEntity<CommandeDTO> ajoutPlat(@PathVariable("id") Integer idCommande, @RequestParam String plat) throws TableRestaurantServiceException {
+		if (plat == null || plat.isBlank()) {
 			return ResponseEntity.badRequest().body(null);
 		}
 		
 		Integer idPlat;
 		try {
-			idPlat = Integer.parseInt(idplatstring);
+			idPlat = Integer.parseInt(plat);
 		} catch (NumberFormatException e) {
 			return ResponseEntity.badRequest().body(null);
 		}
@@ -137,7 +137,7 @@ public class CommandeRest {
 	
 		
 	@PutMapping("/{id}/fermer")
-	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> updatePassee(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);
@@ -151,7 +151,7 @@ public class CommandeRest {
 	}
 	
 	@PutMapping("/{id}/prete")
-	public ResponseEntity<Object> updatePrete(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> updatePrete(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);
@@ -165,7 +165,7 @@ public class CommandeRest {
 	}
 	
 	@PutMapping("/{id}/payer")
-	public ResponseEntity<Object> updatePayee(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> updatePayee(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);
@@ -179,7 +179,7 @@ public class CommandeRest {
 	}
 		
 	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws CommandeServiceException {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
 			commande = commandeService.getCommandeById(id);

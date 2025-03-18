@@ -13,18 +13,22 @@ import fr.formation.fil_rouge_YOLO_part3.rest.LigneCommandeDto.LigneCommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
+import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 
 @Component
 public class CommandeMapper {
     
 	private final ReservationService reservationService;
+	private final TableRestaurantService tableRestaurantService;
 
 	@Autowired
-	public CommandeMapper(ReservationService reservationService) {
+	public CommandeMapper(ReservationService reservationService, TableRestaurantService tableRestaurantService) {
 		this.reservationService = reservationService;
+		this.tableRestaurantService = tableRestaurantService;
 	}
 
-    public CommandeDTO toDTO(Commande commande) {
+    public CommandeDTO toDTO(Commande commande) throws TableRestaurantServiceException {
         CommandeDTO dto = new CommandeDTO();
         dto.setIdCommande(commande.getIdCommande());
         dto.setStatut(commande.getStatut());
@@ -37,6 +41,10 @@ public class CommandeMapper {
         
         Integer idTableRestaurant = reservationService.getIdTableRestaurantById(commande.getReservation().getIdReservation());
         dto.setIdTableRestaurant(idTableRestaurant);
+        
+        Integer numeroTable = tableRestaurantService.getTableRestaurantById(idTableRestaurant).getNumeroTable();
+        dto.setNumeroTable(numeroTable);
+        
         dto.setReservationDto(new ReservationDTO(commande.getReservation()));
         return dto;
     }
