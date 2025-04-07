@@ -2,12 +2,9 @@ package fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto;
 
 import java.util.List;
 
-<<<<<<< HEAD
-import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
-=======
+
 import fr.formation.fil_rouge_YOLO_part3.rest.LigneCommandeDto.LigneCommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
->>>>>>> dev
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

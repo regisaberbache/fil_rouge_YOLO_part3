@@ -34,8 +34,8 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 	
 	@Override
-	public List<Commande> getAllCommandesByStatut(String statut) {
-		return repo.findAllCommandeByCommandeStatut(statut);
+	public List<Commande> getAllCommandesByStatut(Integer idRestau,String statut) {
+		return repo.findAllCommandeByCommandeStatut(idRestau,statut);
 	}
 
 	@Override

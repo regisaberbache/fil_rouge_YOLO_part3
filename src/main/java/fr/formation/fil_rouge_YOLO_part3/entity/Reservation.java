@@ -28,7 +28,7 @@ public class Reservation {
 	private Integer idReservation;
 	
 	@Column(name = "id_tables_restaurant")
-    private TableRestaurant idTableRestaurant;
+    private Integer idTableRestaurant;
 	
 //	@ManyToOne
 //	@JoinColumn(name="id_tables_restaurant")

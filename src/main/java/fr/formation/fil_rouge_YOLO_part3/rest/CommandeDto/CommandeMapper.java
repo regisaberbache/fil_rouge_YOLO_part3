@@ -45,6 +45,12 @@ public class CommandeMapper {
         Integer numeroTable = tableRestaurantService.getTableRestaurantById(idTableRestaurant).getNumeroTable();
         dto.setNumeroTable(numeroTable);
         
+        Integer nbPersonnes = reservationService.getNbPersonneById(commande.getReservation().getIdReservation());
+        dto.setNbPersonnes(nbPersonnes);
+        
+        String nomClient = reservationService.getNomUtilisateurByUtilisateur(commande.getReservation().getUtilisateur().getIdUtilisateur());
+        dto.setNomClient(nomClient);
+        
         dto.setReservationDto(new ReservationDTO(commande.getReservation()));
         return dto;
     }

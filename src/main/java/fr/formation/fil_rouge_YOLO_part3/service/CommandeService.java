@@ -7,7 +7,7 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 public interface CommandeService {
 	Commande createCommande(Commande commande);
 	List<Commande> getAllCommandes();
-	List<Commande> getAllCommandesByStatut(String statut);
+	List<Commande> getAllCommandesByStatut(Integer idRestau, String statut);
 	Commande getCommandeById(Integer id) throws CommandeServiceException;
 	void updateCommande(Commande commande);
 	void deleteCommande(Commande commande);
