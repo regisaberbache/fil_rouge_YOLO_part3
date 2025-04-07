@@ -18,6 +18,7 @@ public class ReservationDTO {
 	private String statut;
 	private LocalDateTime horaireReservation;
 	private UtilisateurDTO utilisateur;
+	private Integer idTableRestaurant;
 	
 	public ReservationDTO(Reservation reservation) {
 		this.idReservation = reservation.getIdReservation();
