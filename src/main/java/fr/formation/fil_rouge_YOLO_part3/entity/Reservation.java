@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +30,10 @@ public class Reservation {
 	@Column(name = "id_tables_restaurant")
     private TableRestaurant idTableRestaurant;
 	
+//	@ManyToOne
+//	@JoinColumn(name="id_tables_restaurant")
+//	private TableRestaurant tableRestaurant;
+	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
  
@@ -44,17 +47,20 @@ public class Reservation {
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
 	
-	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
+	public Reservation(Integer idTableRestaurant, Integer nbPersonne, String statut, LocalDateTime horaireReservation,
+			Utilisateur utilisateur) {
+		this.idTableRestaurant = idTableRestaurant;
 		this.nbPersonne = nbPersonne;
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
-	}
-
-	@Override
-	public String toString() {
-		return "Reservation idReservation=" + idReservation + ", Table Restaurant=" + idTableRestaurant + ", nbPersonne=" + nbPersonne + ", statut=" + statut
-				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+		this.utilisateur = utilisateur;
 	}
 	
+	@Override
+	public String toString() {
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+	}
+
 	
 }

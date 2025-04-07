@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -23,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.rest.DemandeResaDto.DemandeResaDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
@@ -39,6 +43,9 @@ public class TableRestaurantRest {
 	@Autowired
 	RestaurantService restaurantService;
 
+	@Autowired
+	ReservationService reservationService;
+
 	@GetMapping
 	public ResponseEntity<List<TableRestaurantDTO>> getAll() {
 		List<TableRestaurantDTO> lst = new ArrayList<>();
@@ -47,43 +54,82 @@ public class TableRestaurantRest {
 		}
 		return ResponseEntity.ok(lst);
 	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("id") Integer id) {
-		Restaurant restaurant;
-		try {
-			restaurant = restaurantService.getById(id);
-		} catch (RestaurantServiceException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesNonOccupees = toutesLesTables.stream()
-				.filter(table -> table.getRestaurant() != null).filter(table -> table.getReservations().isEmpty())
-				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table)).collect(Collectors.toList());
-		return ResponseEntity.ok(tablesNonOccupees);
+	
+	
+	
+	@GetMapping("{idRestau}")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("idRestau") Integer id) {
+	    LocalDateTime plus120 = LocalDateTime.now().plus(120, ChronoUnit.MINUTES);
+	    LocalDateTime minus120 = LocalDateTime.now().minus(120, ChronoUnit.MINUTES);
+	            
+	    List<TableRestaurant> tablesNonOccupees = service.getAvailableTablesFromRestaurant(minus120, plus120, id);        
+	    List<TableRestaurant> tablesNonOccupeesFutures = tablesNonOccupees;
+	    
+	    for(TableRestaurant table : tablesNonOccupeesFutures) {
+	        List<Reservation> resas = table.getReservations();
+	        table.setReservations(
+	            resas.stream()
+	                .filter(resa -> !resa.getHoraireReservation().isBefore(minus120))
+	                .collect(Collectors.toList())
+	        );
+	    }
+	    
+	    List<TableRestaurantDTO> tablesNonOccupeesFuturesDto = tablesNonOccupeesFutures.stream()
+	            .map(table -> new TableRestaurantDTO(table))
+	            .collect(Collectors.toList());
+	    
+	    return ResponseEntity.ok(tablesNonOccupeesFuturesDto);
 	}
-
+	
+	
+	
+	/*
+	 POUR TESTER, mettre dans le body un JSON de type :
+	 
+	  	{
+		"date": "2025-03-18",
+		"heure": "14:30:00",
+		"nbPersonnes": 4
+		}
+	 
+	 */
 	@GetMapping("libres/{id}")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesLibres(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<TableRestaurantLibreDTO>> getTablesLibres(@PathVariable("id") Integer id, @RequestBody DemandeResaDTO demandeResaDto) {
 		Restaurant restaurant;
 		try {
 			restaurant = restaurantService.getById(id);
 		} catch (RestaurantServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesLibres = toutesLesTables.stream().filter(table -> table.getRestaurant() != null)
-				.filter(table -> table.getReservations().isEmpty())
-				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table)).collect(Collectors.toList());
-		return ResponseEntity.ok(tablesLibres);
+		
+		LocalDateTime horaireDemande = LocalDateTime.of(demandeResaDto.getDate(), demandeResaDto.getHeure());
+		Integer nbPersonnesDemande = demandeResaDto.getNbPersonnes();
+		
+		List<TableRestaurant> toutesLesTables = restaurant.getTablesRestaurant();
+		List<TableRestaurantLibreDTO> tablesLibresDto = toutesLesTables.stream()
+			    .filter(table -> table.getRestaurant() != null)
+			    .filter(table -> table.getNbPlaces() >= (nbPersonnesDemande - 1))
+			    .filter(table -> {
+			        LocalDateTime plus120 = horaireDemande.plus(120, ChronoUnit.MINUTES);
+			        LocalDateTime minus120 = horaireDemande.minus(120, ChronoUnit.MINUTES);
+			        return table.getReservations() == null || 
+			               table.getReservations().stream()
+			                   .noneMatch(reservation -> 
+			                       reservation.getHoraireReservation().isBefore(plus120) && 
+			                       reservation.getHoraireReservation().isAfter(minus120)
+			                   );
+			    })
+			    .map(table -> new TableRestaurantLibreDTO(table))
+			    .collect(Collectors.toList());
+		
+		return ResponseEntity.ok(tablesLibresDto);
 	}
 
-	@GetMapping("occupees")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
+	@GetMapping("{idRestau}/occupees")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees(@PathVariable("idRestau") Integer idRestau) {
 		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
 		List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
+				.filter(table -> table.getRestaurant() != null && idRestau.equals(table.getRestaurant().getIdRestaurant()))
 				.filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() && table
 						.getReservations().stream().anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
 				.map(table -> {
@@ -95,16 +141,6 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(tablesOccupees);
 	}
 
-//	@GetMapping("{id}")
-//	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
-//		TableRestaurant tableRestaurant;
-//		try {
-//			tableRestaurant = service.getTableRestaurantById(id);
-//		} catch (TableRestaurantServiceException e) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
-//		}
-//		return ResponseEntity.ok(new TableRestaurantDTO(tableRestaurant));
-//	}
 
 	@PostMapping
 	public ResponseEntity<TableRestaurantDTO> create(@RequestBody TableRestaurantDTO tableRestaurantDto) {
@@ -114,7 +150,7 @@ public class TableRestaurantRest {
 	}
 
 	@PutMapping
-	public ResponseEntity<TableRestaurantDTO> update(@RequestBody TableRestaurantDTO tableRestaurantDto) {
+	public ResponseEntity<TableRestaurantDTO> update(@RequestBody TableRestaurantDTO tableRestaurantDto) throws TableRestaurantServiceException {
 		// TODO Gérer les exceptions
 		service.updateTableRestaurant(tableRestaurantDto.toEntity());
 		return ResponseEntity.ok(tableRestaurantDto);
@@ -168,7 +204,7 @@ public class TableRestaurantRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws TableRestaurantServiceException {
 		TableRestaurant tableRestaurant;
 		try {
 			tableRestaurant = service.getTableRestaurantById(id);

@@ -1,7 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
@@ -12,14 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TableRestaurantDTO {
-	private Integer idTableRestaurant;
-	private Integer nbPlaces;
-	private Integer numeroTable;
+public class TableRestaurantLibreDTO {
 	private Integer idRestaurant;
-	private List<ReservationDTO> reservations;
+	private Integer idTableRestaurant;
+	private Integer numeroTable;
+	private Integer nbPlaces;
 		
-	public TableRestaurantDTO(TableRestaurant tableRestaurant) {
+	public TableRestaurantLibreDTO(TableRestaurant tableRestaurant) {
 		this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();
 		this.nbPlaces = tableRestaurant.getNbPlaces();
 		this.numeroTable = tableRestaurant.getNumeroTable();
@@ -28,12 +26,9 @@ public class TableRestaurantDTO {
         } else {
             this.idRestaurant = null;
         }
-		this.reservations = tableRestaurant.getReservations().stream()
-		        .map(reservation -> new ReservationDTO(reservation))
-		        .collect(Collectors.toList());
 	}
 	
-	public TableRestaurantDTO(TableRestaurant tableRestaurant, List<ReservationDTO> reservationsFiltrees) {
+	public TableRestaurantLibreDTO(TableRestaurant tableRestaurant, List<ReservationDTO> reservationsFiltrees) {
 	    this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();
 	    this.nbPlaces = tableRestaurant.getNbPlaces();
 	    this.numeroTable = tableRestaurant.getNumeroTable();
@@ -42,7 +37,6 @@ public class TableRestaurantDTO {
 	    } else {
 	        this.idRestaurant = null;
 	    }
-	    this.reservations = reservationsFiltrees;
 	}
  		
 	public TableRestaurant toEntity() {

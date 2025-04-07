@@ -7,16 +7,16 @@ import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @Component
-public class UtilisateurWrapper {
+public class UtilisateurMapper {
 
     private final RestaurantService restaurantService;
 
     @Autowired
-    public UtilisateurWrapper(RestaurantService restaurantService) {
+    public UtilisateurMapper(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
     
-    public UtilisateurWrapper() {
+    public UtilisateurMapper() {
         this.restaurantService = null;
     }
 
@@ -31,8 +31,6 @@ public class UtilisateurWrapper {
         dto.setPrenom(utilisateur.getPrenom());
         dto.setEmail(utilisateur.getEmail());
         dto.setTelephone(utilisateur.getTelephone());
-        dto.setLoginDto(utilisateur.getLogin());
-        dto.setPasswordDto(utilisateur.getPassword());
         if (utilisateur.getRole() != null) {
         	dto.setRoleDto(utilisateur.getRole());
         }
@@ -55,8 +53,6 @@ public class UtilisateurWrapper {
         utilisateur.setPrenom(dto.getPrenom());
         utilisateur.setEmail(dto.getEmail());
         utilisateur.setTelephone(dto.getTelephone());
-        utilisateur.setLogin(dto.getLoginDto());
-        utilisateur.setPassword(dto.getPasswordDto());
         if (dto.getRoleDto() != null && !"".equalsIgnoreCase(dto.getRoleDto().getIdRole().toString()) 
             && !"".equalsIgnoreCase(dto.getRoleDto().getLibelle())) {            
             utilisateur.setRole(dto.getRoleDto());            
@@ -79,11 +75,6 @@ public class UtilisateurWrapper {
         existingUtilisateur.setPrenom(dto.getPrenom());
         existingUtilisateur.setTelephone(dto.getTelephone());
         existingUtilisateur.setEmail(dto.getEmail());
-        existingUtilisateur.setLogin(dto.getLoginDto());
-        
-        if (dto.getPasswordDto() != null && !dto.getPasswordDto().isEmpty()) {
-            existingUtilisateur.setPassword(dto.getPasswordDto());
-        }
         
         if (dto.getRoleDto() != null) {
             existingUtilisateur.setRole(dto.getRoleDto());
