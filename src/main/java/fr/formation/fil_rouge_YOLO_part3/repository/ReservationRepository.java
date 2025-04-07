@@ -13,4 +13,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 	@Query("SELECT r.idTableRestaurant FROM Reservation r WHERE r.id = :idReservation")
     Integer findIdTableRestaurantById(@Param("idReservation") Integer idReservation);
 
+	Integer findNbPersonnesById(Integer idReservation);
+
+	Integer findNumeroTableById(Integer idReservation);
+
 }

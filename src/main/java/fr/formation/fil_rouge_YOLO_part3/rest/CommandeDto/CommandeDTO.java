@@ -16,6 +16,9 @@ public class CommandeDTO {
 	private String statut;
 	private Integer idReservation;
 	private Integer idTableRestaurant;
+	private String nomClient;
+    private Integer nbPersonnes;
+    private Integer numeroTable;
 	private List<LigneCommande> lignes;
 	
 

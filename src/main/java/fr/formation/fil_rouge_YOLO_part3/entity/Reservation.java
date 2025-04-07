@@ -29,7 +29,7 @@ public class Reservation {
 	private Integer idReservation;
 	
 	@Column(name = "id_tables_restaurant")
-    private Integer idTableRestaurant;
+    private TableRestaurant idTableRestaurant;
 	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;

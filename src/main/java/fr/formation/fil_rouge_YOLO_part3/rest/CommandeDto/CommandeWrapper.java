@@ -28,7 +28,11 @@ public class CommandeWrapper {
         dto.setLignes(commande.getLignes());
         dto.setIdReservation(commande.getReservation().getIdReservation());
         Integer idTableRestaurant = reservationRepository.findIdTableRestaurantById(commande.getReservation().getIdReservation());
+        Integer nbPersonnes = reservationRepository.findNbPersonnesById(commande.getReservation().getIdReservation());
+        Integer numeroTable = reservationRepository.findNumeroTableById(commande.getReservation().getIdReservation());
         dto.setIdTableRestaurant(idTableRestaurant);
+        dto.setNbPersonnes(nbPersonnes);
+        dto.setNumeroTable(numeroTable);
         return dto;
     }
 
