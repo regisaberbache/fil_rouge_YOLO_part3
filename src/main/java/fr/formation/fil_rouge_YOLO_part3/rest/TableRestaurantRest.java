@@ -125,10 +125,11 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(tablesLibresDto);
 	}
 
-	@GetMapping("occupees")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees() {
+	@GetMapping("{idRestau}/occupees")
+	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees(@PathVariable("idRestau") Integer idRestau) {
 		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
 		List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
+				.filter(table -> table.getRestaurant() != null && idRestau.equals(table.getRestaurant().getIdRestaurant()))
 				.filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() && table
 						.getReservations().stream().anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
 				.map(table -> {
