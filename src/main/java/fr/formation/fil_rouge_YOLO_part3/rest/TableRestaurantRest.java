@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.rest.DemandeResaDto.DemandeResaDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
@@ -65,21 +68,49 @@ public class TableRestaurantRest {
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(tablesNonOccupees);
 	}
-
+	
+	
+	
+	/*
+	 POUR TESTER, mettre dans le body un JSON de type :
+	 
+	  	{
+		"date": "2025-03-18",
+		"heure": "14:30:00",
+		"nbPersonnes": 4
+		}
+	 
+	 */
 	@GetMapping("libres/{id}")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesLibres(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<TableRestaurantLibreDTO>> getTablesLibres(@PathVariable("id") Integer id, @RequestBody DemandeResaDTO demandeResaDto) {
 		Restaurant restaurant;
 		try {
 			restaurant = restaurantService.getById(id);
 		} catch (RestaurantServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesLibres = toutesLesTables.stream().filter(table -> table.getRestaurant() != null)
-				.filter(table -> table.getReservations().isEmpty())
-				.filter(table -> table.getRestaurant().getIdRestaurant().equals(id))
-				.map(table -> new TableRestaurantDTO(table)).collect(Collectors.toList());
-		return ResponseEntity.ok(tablesLibres);
+		
+		LocalDateTime horaireDemande = LocalDateTime.of(demandeResaDto.getDate(), demandeResaDto.getHeure());
+		Integer nbPersonnesDemande = demandeResaDto.getNbPersonnes();
+		
+		List<TableRestaurant> toutesLesTables = restaurant.getTablesRestaurant();
+		List<TableRestaurantLibreDTO> tablesLibresDto = toutesLesTables.stream()
+			    .filter(table -> table.getRestaurant() != null)
+			    .filter(table -> table.getNbPlaces() >= (nbPersonnesDemande - 1))
+			    .filter(table -> {
+			        LocalDateTime plus120 = horaireDemande.plus(120, ChronoUnit.MINUTES);
+			        LocalDateTime minus120 = horaireDemande.minus(120, ChronoUnit.MINUTES);
+			        return table.getReservations() == null || 
+			               table.getReservations().stream()
+			                   .noneMatch(reservation -> 
+			                       reservation.getHoraireReservation().isBefore(plus120) && 
+			                       reservation.getHoraireReservation().isAfter(minus120)
+			                   );
+			    })
+			    .map(table -> new TableRestaurantLibreDTO(table))
+			    .collect(Collectors.toList());
+		
+		return ResponseEntity.ok(tablesLibresDto);
 	}
 
 	@GetMapping("occupees")
@@ -105,6 +136,12 @@ public class TableRestaurantRest {
 		return ResponseEntity.ok(tableRestaurantDto);
 	}
 
+	@PutMapping
+	public ResponseEntity<TableRestaurantDTO> update(@RequestBody TableRestaurantDTO tableRestaurantDto) throws TableRestaurantServiceException {
+		// TODO Gérer les exceptions
+		service.updateTableRestaurant(tableRestaurantDto.toEntity());
+		return ResponseEntity.ok(tableRestaurantDto);
+	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<Object> updateTableStatutToOccupees(@PathVariable("id") Integer id) {
@@ -154,7 +191,7 @@ public class TableRestaurantRest {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> delete(@PathVariable("id") Integer id) throws TableRestaurantServiceException {
 		TableRestaurant tableRestaurant;
 		try {
 			tableRestaurant = service.getTableRestaurantById(id);

@@ -1,5 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,11 @@ public class LigneCommande {
 	@ManyToOne
 	@JoinColumn(name = "id_plats")
 	private Plat plat;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_commandes")
+	@JsonIgnore
+	private Commande commande;
 	
 	private Integer quantite;
 

@@ -21,7 +21,7 @@ public class ReservationDTO {
 
 	
 	public ReservationDTO(Reservation reservation) {
-		UtilisateurMapper utilisateurWrapper = new UtilisateurMapper();
+		UtilisateurMapper utilisateurMapper = new UtilisateurMapper();
 		
 		this.idReservation = reservation.getIdReservation();
 		this.nbPersonne = reservation.getNbPersonne();

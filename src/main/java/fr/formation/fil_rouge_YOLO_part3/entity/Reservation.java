@@ -47,17 +47,20 @@ public class Reservation {
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
 	
-	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
+	public Reservation(Integer idTableRestaurant, Integer nbPersonne, String statut, LocalDateTime horaireReservation,
+			Utilisateur utilisateur) {
+		this.idTableRestaurant = idTableRestaurant;
 		this.nbPersonne = nbPersonne;
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
+		this.utilisateur = utilisateur;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
 				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
 	}
-	
+
 	
 }

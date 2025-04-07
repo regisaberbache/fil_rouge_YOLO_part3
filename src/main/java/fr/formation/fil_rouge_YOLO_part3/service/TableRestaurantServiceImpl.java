@@ -18,7 +18,7 @@ public class TableRestaurantServiceImpl implements TableRestaurantService {
 	public void createTableRestaurant(TableRestaurant tableRestaurant) {
 		repo.save(tableRestaurant);
 	}
-
+ 
 	@Override
 	public List<TableRestaurant> getAllTableRestaurants() {
 		return repo.findAll();
@@ -36,12 +36,12 @@ public class TableRestaurantServiceImpl implements TableRestaurantService {
 	}
 
 	@Override
-	public void updateTableRestaurant(TableRestaurant tableRestaurant) {
+	public void updateTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException {
 		repo.save(tableRestaurant);
 	}
 
 	@Override
-	public void deleteTableRestaurant(TableRestaurant tableRestaurant) {
+	public void deleteTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException {
 		repo.delete(tableRestaurant);
 	}
 	

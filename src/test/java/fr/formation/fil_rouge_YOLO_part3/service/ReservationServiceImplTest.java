@@ -1,81 +1,74 @@
 package fr.formation.fil_rouge_YOLO_part3.service;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 
-@Sql({"/YOLOTEST_creationTables.sql", "/YOLOTEST_dataset.sql"})
 @SpringBootTest
-class ReservationServiceImplTest implements CommandLineRunner {
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Utiliser la BDD SQLServer YOLOTEST
+class ReservationServiceImplTest {
 	@Autowired
-	ReservationService reservationService;
-	@Autowired
-	UtilisateurService utilisateurService;
-	
-	// à tester :
-	// nbPersonnes > 0 et <= 8
-	// nbPersonnes > 8 => alert "Veuillez contacter le restaurant pour une réservation de plus de 8 personnes"
-	// date doit être une date d'ouverture
-	// horaire doit être un horaire d'ouverture
-	// date est bien today ou après
-	// si date today, horaire doit être après now
-	
+	ReservationServiceImpl reservationService;
+
 	@BeforeEach
-    void setUp() {
-
-    }
-
-	@Test
-	void CreateReservation_insere_une_Reservation() throws UtilisateurServiceException {
-		Utilisateur utilisateur = utilisateurService.getUtilisateurById(1);
-		System.out.println(utilisateur.getNom());
-		
-		/*
-		 * Reservation resa = reservationService.createReservation(Reservation.builder()
-		 * .nbPersonne(4) .statut("En attente")
-		 * .horaireReservation(LocalDateTime.of(2015, 03, 20, 12, 30))
-		 * .utilisateur(utilisateur) .build());
-		 * System.out.println(resa.getNbPersonne());
-		 */
-		//assertTrue(resa != null);
-		
-		fail("Not yet implemented");
+	void setUp() {
 	}
 
+	// Récupération de toutes les réservations
 	@Test
 	void testGetAllReservations() {
-		fail("Not yet implemented");
+		List<Reservation> reservations = reservationService.getAllReservations();
+		assertFalse(reservations.isEmpty());
+		assertEquals(7, reservations.size());
 	}
-
+	
+	// Récupération par ID
 	@Test
 	void testGetReservationById() throws ReservationServiceException {
-		Reservation resa = reservationService.getReservationById(2);
-		System.out.println(resa.getStatut());
-		assertTrue(resa != null);
+		Reservation reservation = reservationService.getReservationById(1);
+		assertNotNull(reservation);
+		assertEquals(1, reservation.getIdTableRestaurant());
 	}
-
+	
+	 // Gestion d'une erreur si l'ID n'existe pas
 	@Test
-	void testUpdateReservation() {
-		fail("Not yet implemented");
+	void testGetRestaurantById_NotFound() {
+		Exception exception = assertThrows(ReservationServiceException.class, () -> {
+			reservationService.getReservationById(99);
+		});
+		assertEquals("Réservation non trouvée", exception.getMessage());
 	}
-
+	
+    // Création d'une réservation
 	@Test
-	void testDeleteReservation() {
-		fail("Not yet implemented");
+	void testcreateReservation() {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setIdUtilisateur(1);
+		
+		Reservation reservation = new Reservation(1, 2, "confirmée", LocalDateTime.of(2025, 3, 20, 12, 30), utilisateur);
+		reservationService.createReservation(reservation);
+        
+		// Assert (Vérifications)
+		List<Reservation> reservations = reservationService.getAllReservations();
+		assertEquals(7, reservations.size()); // Vérifie que la réservation a bien été ajoutée
+        Reservation savedReservation = reservations.get(7);
+        assertEquals(2, savedReservation.getNbPersonne());
+        assertEquals("confirmée", savedReservation.getStatut());
+        assertEquals(LocalDateTime.of(2025, 3, 20, 12, 30), savedReservation.getHoraireReservation());
+        assertEquals(1, savedReservation.getUtilisateur().getIdUtilisateur());
 	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-	}
-
+	
 }

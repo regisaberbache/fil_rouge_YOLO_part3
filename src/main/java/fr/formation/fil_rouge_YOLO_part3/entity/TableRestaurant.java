@@ -11,12 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @NoArgsConstructor
-@Entity
+@AllArgsConstructor
 @Table(name = "tables_restaurant")
 public class TableRestaurant {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,12 +39,4 @@ public class TableRestaurant {
 	@JoinColumn(name="id_tables_restaurant")
 	private List<Reservation> reservations;
 	
-	public TableRestaurant(Integer nbPlaces, Integer numeroTable, List<Reservation> reservations) {
-		this.nbPlaces = nbPlaces;
-		this.numeroTable = numeroTable;
-		this.reservations = reservations;
-	}
-	
-	
-
 }
