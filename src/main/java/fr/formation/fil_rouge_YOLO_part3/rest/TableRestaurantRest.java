@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/tables")
 public class TableRestaurantRest {
 	@Autowired
@@ -123,21 +125,12 @@ public class TableRestaurantRest {
 			    .collect(Collectors.toList());
 		
 		return ResponseEntity.ok(tablesLibresDto);
+		
 	}
 
 	@GetMapping("{idRestau}/occupees")
 	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees(@PathVariable("idRestau") Integer idRestau) {
-		List<TableRestaurant> toutesLesTables = service.getAllTableRestaurants();
-		List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
-				.filter(table -> table.getRestaurant() != null && idRestau.equals(table.getRestaurant().getIdRestaurant()))
-				.filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() && table
-						.getReservations().stream().anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
-				.map(table -> {
-					List<ReservationDTO> reservationsFiltrees = table.getReservations().stream()
-							.filter(reservation -> "arrivee".equals(reservation.getStatut()))
-							.map(reservation -> new ReservationDTO(reservation)).collect(Collectors.toList());
-					return new TableRestaurantDTO(table, reservationsFiltrees);
-				}).collect(Collectors.toList());
+		List<TableRestaurantDTO> tablesOccupees = service.getAllTablesOccupees(idRestau);
 		return ResponseEntity.ok(tablesOccupees);
 	}
 
