@@ -30,10 +30,6 @@ public class Reservation {
 	@Column(name = "id_tables_restaurant")
     private Integer idTableRestaurant;
 	
-//	@ManyToOne
-//	@JoinColumn(name="id_tables_restaurant")
-//	private TableRestaurant tableRestaurant;
-	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
  
