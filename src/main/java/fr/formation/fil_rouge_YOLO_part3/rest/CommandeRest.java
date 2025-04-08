@@ -103,7 +103,7 @@ public class CommandeRest {
 	// Crée commande vide avec idReservation et idTableRestaurant. Statut "brouillon" par défaut.
 	/* Exemple de JSON dans le body du POST :
 	{
-	    "": 1,
+	    "idReservation": 1,
 	    "idTableRestaurant": 1,
 	    "lignes": []
 	}
@@ -197,6 +197,20 @@ public class CommandeRest {
 		try {
 			commande = commandeService.getCommandeById(id);
 	        commande.setStatut("prete");
+	        commandeService.updateCommande(commande);
+		} catch (CommandeServiceException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+
+		return ResponseEntity.ok(commandeMapper.toDTO(commande));
+	}
+	
+	@PutMapping("/{id}/servie")
+	public ResponseEntity<Object> updateServie(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
+		Commande commande;
+		try {
+			commande = commandeService.getCommandeById(id);
+	        commande.setStatut("servie");
 	        commandeService.updateCommande(commande);
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

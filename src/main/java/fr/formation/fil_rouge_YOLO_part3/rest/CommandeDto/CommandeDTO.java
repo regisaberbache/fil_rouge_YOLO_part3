@@ -22,6 +22,4 @@ public class CommandeDTO {
     private Integer numeroTable;
 	private List<LigneCommande> lignes;
 
-	
-
 }
