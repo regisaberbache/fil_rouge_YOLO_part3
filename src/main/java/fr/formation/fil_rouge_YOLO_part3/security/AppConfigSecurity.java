@@ -36,6 +36,7 @@ public class AppConfigSecurity {
 					.requestMatchers("/accueil").permitAll()
 					.requestMatchers("/login").permitAll()
 					.requestMatchers("/auth").permitAll()
+					.requestMatchers(HttpMethod.OPTIONS).permitAll()
 					
 					// Permettre l'accès à tous les rôles présents dans la table rôle
 					.requestMatchers(HttpMethod.GET, "/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
