@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 
@@ -78,5 +79,17 @@ public class ReservationServiceImpl implements ReservationService {
 	    repo.save(reservation);
 	    return new ReservationDTO(reservation);
 	}
+
+	@Override
+	public Integer getNbPersonneById(Integer idReservation) {
+		return repo.findNbPersonneByIdReservation(idReservation);
+	}
+
+	@Override
+	public String getNomUtilisateurByUtilisateur(Integer idUtilisateur) {
+		return repo.findNomUtilisateurByUtilisateur(idUtilisateur);
+	}
+
+
 
 }

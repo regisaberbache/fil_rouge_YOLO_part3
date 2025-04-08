@@ -13,5 +13,6 @@ public interface CommandeService {
 	void deleteCommande(Commande commande);
 	Integer ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException;
 	Integer retirerPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException;
+	List<Commande> getAllCommandesByStatutAndIdRestaurant(Integer idRestau, String statut);
 
 }

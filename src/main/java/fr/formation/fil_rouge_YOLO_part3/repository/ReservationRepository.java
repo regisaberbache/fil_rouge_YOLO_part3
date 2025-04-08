@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 	
@@ -21,5 +22,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 	
 	@Query(value = "SELECT * FROM reservations WHERE horaire_reservation >= :now AND id_restaurants = :idrestaurant ORDER BY horaire_reservation ASC", nativeQuery = true)
     List<Reservation> findFutureReservationsFromRestaurant(@Param("now") LocalDateTime now, @Param("idrestaurant") Integer idRestaurant);
+
+
+	Integer findTableRestaurantByIdTableRestaurant(Integer idReservation);
+	
+	@Query("SELECT Distinct  r.utilisateur.nom FROM Reservation r WHERE r.utilisateur.id = :idUtilisateur")	
+	String findNomUtilisateurByUtilisateur(Integer idUtilisateur);
+
+	@Query("SELECT r.nbPersonne FROM Reservation r WHERE r.id = :idReservation")
+	Integer findNbPersonneByIdReservation(@Param("idReservation") Integer idReservation);;
 
 }

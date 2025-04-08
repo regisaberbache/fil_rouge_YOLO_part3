@@ -28,7 +28,6 @@ import fr.formation.fil_rouge_YOLO_part3.service.PlatServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 import io.swagger.v3.oas.annotations.Operation;
-
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/commandes")
@@ -56,7 +55,17 @@ public class CommandeRest {
 		return ResponseEntity.ok(lst);
 	}
 	
-	@GetMapping("{statut}")
+	@GetMapping("{idRestau}/statut/{statut}")
+	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatutAndIdRestaurant(@PathVariable("idRestau") Integer idRestau,
+																	 @PathVariable("statut") String statut) throws CommandeServiceException, TableRestaurantServiceException {
+		List<CommandeDTO> lst = new ArrayList<>();
+		for (Commande commande : commandeService.getAllCommandesByStatutAndIdRestaurant(idRestau,statut)) {
+			lst.add(commandeMapper.toDTO(commande));
+		}
+		return ResponseEntity.ok(lst);
+	}
+	
+	@GetMapping("statut/{statut}")
 	public ResponseEntity<List<CommandeDTO>> getAllCommandesByStatut(@PathVariable("statut") String statut) throws CommandeServiceException, TableRestaurantServiceException {
 		List<CommandeDTO> lst = new ArrayList<>();
 		for (Commande commande : commandeService.getAllCommandesByStatut(statut)) {
@@ -79,7 +88,7 @@ public class CommandeRest {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commande non trouvée pour cet id et ce statut");
 	}
 	
-	@PutMapping("{id}")
+	@GetMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
@@ -137,7 +146,7 @@ public class CommandeRest {
 		
 	    return ResponseEntity.ok(qtePlatFinale);
 	}
-	
+
 	
 	
 	@PutMapping("/{id}/retirerplat")
