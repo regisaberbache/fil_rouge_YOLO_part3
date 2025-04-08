@@ -47,6 +47,10 @@ public class Reservation {
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
 	
+	@ManyToOne
+	@JoinColumn(name="id_restaurants")
+	private Restaurant restaurant;
+	
 	public Reservation(Integer idTableRestaurant, Integer nbPersonne, String statut, LocalDateTime horaireReservation,
 			Utilisateur utilisateur) {
 		this.idTableRestaurant = idTableRestaurant;

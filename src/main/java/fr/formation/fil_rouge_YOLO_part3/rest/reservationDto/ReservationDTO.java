@@ -3,6 +3,8 @@ package fr.formation.fil_rouge_YOLO_part3.rest.reservationDto;
 import java.time.LocalDateTime;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurMapper;
 import lombok.AllArgsConstructor;
@@ -28,11 +30,14 @@ public class ReservationDTO {
 	}
 	
 	public Reservation toEntity() {
+		 Utilisateur utilisateurEntity = new Utilisateur();
+	        utilisateurEntity.setIdUtilisateur(utilisateur.getIdUtilisateur());
 		return Reservation.builder()
 				.idReservation(idReservation)
 				.nbPersonne(nbPersonne)
 				.statut(statut)
 				.horaireReservation(horaireReservation)
+				.utilisateur(utilisateurEntity)
 				.build();
 	}
 }

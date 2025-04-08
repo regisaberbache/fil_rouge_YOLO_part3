@@ -12,16 +12,23 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
+import fr.formation.fil_rouge_YOLO_part3.repository.RestaurantRepository;
+import fr.formation.fil_rouge_YOLO_part3.repository.UtilisateurRepository;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
 	@Autowired
 	ReservationRepository repo;
-	
+
 	@Autowired
 	RestaurantServiceImpl restoService;
-	
+
+	@Autowired
+	UtilisateurRepository utilisateurRepository;
+
+	@Autowired
+	RestaurantRepository restaurantRepository;
 
 	@Override
 	public List<Reservation> getAllReservations() {
@@ -30,16 +37,15 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation getReservationById(Integer id) throws ReservationServiceException {
-	    return repo.findById(id)
-	            .orElseThrow(() -> new ReservationServiceException("Réservation non trouvée"));
+		return repo.findById(id).orElseThrow(() -> new ReservationServiceException("Réservation non trouvée"));
 	}
-	
-	public List<Reservation> getReservationsByRestaurantId(Integer restaurantId) throws ReservationServiceException, RestaurantServiceException {
-	    Restaurant restaurant = restoService.getById(restaurantId);
-	    return repo.findAll().stream()
-	            .filter(reservation -> reservation.getUtilisateur().getRestaurant().getIdRestaurant().equals(restaurantId))
-	            .sorted(Comparator.comparing(Reservation::getHoraireReservation))
-	            .collect(Collectors.toList());
+
+	public List<Reservation> getReservationsByRestaurantId(Integer restaurantId)
+			throws ReservationServiceException, RestaurantServiceException {
+		Restaurant restaurant = restoService.getById(restaurantId);
+		return repo.findAll().stream().filter(
+				reservation -> reservation.getUtilisateur().getRestaurant().getIdRestaurant().equals(restaurantId))
+				.sorted(Comparator.comparing(Reservation::getHoraireReservation)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -56,28 +62,33 @@ public class ReservationServiceImpl implements ReservationService {
 	public void deleteReservation(Reservation reservation) throws ReservationServiceException {
 		repo.delete(reservation);
 	}
-	
+
 	@Override
 	public Integer getIdTableRestaurantById(Integer idReservation) {
 		return repo.findIdTableRestaurantById(idReservation);
 	}
-	
+
 	@Override
 	public List<Reservation> getFutureReservationsFromRestaurant(LocalDateTime horaire, Integer idRestaurant) {
 		return repo.findFutureReservationsFromRestaurant(LocalDateTime.now(), idRestaurant);
 	}
 
-
 	public List<ReservationDTO> getAllReservationsAsDTOs() {
-	    return repo.findAll().stream()
-	            .map(ReservationDTO::new)
-	            .collect(Collectors.toList());
+		return repo.findAll().stream().map(ReservationDTO::new).collect(Collectors.toList());
 	}
 
-	public ReservationDTO createReservationFromDTO(ReservationDTO dto) {
-	    Reservation reservation = dto.toEntity();
-	    repo.save(reservation);
-	    return new ReservationDTO(reservation);
+	public ReservationDTO createReservationFromDTO(ReservationDTO reservationDto) {
+		Integer idUtilisateur = reservationDto.getUtilisateur().getIdUtilisateur();
+		Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
+				.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+		Reservation reservation = reservationDto.toEntity();
+
+		reservation.setUtilisateur(utilisateur);
+		reservation.setRestaurant(utilisateur.getRestaurant());
+		repo.save(reservation);
+
+		return new ReservationDTO(reservation);
 	}
 
 	@Override
@@ -89,7 +100,5 @@ public class ReservationServiceImpl implements ReservationService {
 	public String getNomUtilisateurByUtilisateur(Integer idUtilisateur) {
 		return repo.findNomUtilisateurByUtilisateur(idUtilisateur);
 	}
-
-
 
 }
