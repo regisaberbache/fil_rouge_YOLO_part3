@@ -20,6 +20,9 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer> {
             "JOIN tables_restaurant t ON r.id_tables_restaurant = t.id " +
             "WHERE c.statut = 'servie' AND t.id_restaurants = :idRestau",
     nativeQuery = true)
-	List<Commande> findAllCommandeByCommandeStatut(@Param("idRestau")Integer idrestau, @Param("statut") String statut);
+	List<Commande> findAllCommandeByCommandeStatutAndIdRestaurant(@Param("idRestau")Integer idrestau, @Param("statut") String statut);
+	
+	@Query("FROM Commande c WHERE c.statut = :statut")
+	List<Commande> findAllCommandeByCommandeStatut(@Param("statut") String statut);
 	
 }
