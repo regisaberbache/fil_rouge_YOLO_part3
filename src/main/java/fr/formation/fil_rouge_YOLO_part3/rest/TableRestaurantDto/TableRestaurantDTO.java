@@ -18,6 +18,7 @@ public class TableRestaurantDTO {
 	private Integer numeroTable;
 	private Integer idRestaurant;
 	private List<ReservationDTO> reservations;
+	private Integer idCommande; //just added this
 		
 	public TableRestaurantDTO(TableRestaurant tableRestaurant) {
 		this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();

@@ -1,7 +1,6 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
@@ -13,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TableRestaurantLibreDTO {
-	private Integer idTableRestaurant;
-	private Integer nbPlaces;
-	private Integer numeroTable;
 	private Integer idRestaurant;
+	private Integer idTableRestaurant;
+	private Integer numeroTable;
+	private Integer nbPlaces;
 		
 	public TableRestaurantLibreDTO(TableRestaurant tableRestaurant) {
 		this.idTableRestaurant = tableRestaurant.getIdTableRestaurant();

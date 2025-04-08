@@ -34,8 +34,8 @@ public class CommandeServiceImpl implements CommandeService {
 	}
 	
 	@Override
-	public List<Commande> getAllCommandesByStatut(String statut) {
-		return repo.findAllCommandeByCommandeStatut(statut);
+	public List<Commande> getAllCommandesByStatutAndIdRestaurant(Integer idRestau,String statut) {
+		return repo.findAllCommandeByCommandeStatutAndIdRestaurant(idRestau,statut);
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class CommandeServiceImpl implements CommandeService {
 	public void deleteCommande(Commande commande) {
 		repo.delete(commande);
 	}
+
 
 	@Override
 	public Integer ajouterPlatACommande(Integer idCommande, Integer idPlat) throws CommandeServiceException, PlatServiceException {
@@ -133,6 +134,11 @@ public class CommandeServiceImpl implements CommandeService {
 	    
 	    repo.save(commande);
 	    return qtePlatFinale;
+	}
+
+	@Override
+	public List<Commande> getAllCommandesByStatut(String statut) {
+		return repo.findAllCommandeByCommandeStatut(statut);
 	}
 	
 }
