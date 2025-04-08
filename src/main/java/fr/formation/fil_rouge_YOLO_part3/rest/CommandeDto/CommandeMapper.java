@@ -1,16 +1,12 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
-import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
-import fr.formation.fil_rouge_YOLO_part3.rest.LigneCommandeDto.LigneCommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.LigneCommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
@@ -32,12 +28,8 @@ public class CommandeMapper {
         CommandeDTO dto = new CommandeDTO();
         dto.setIdCommande(commande.getIdCommande());
         dto.setStatut(commande.getStatut());
-        
-        List<LigneCommandeDTO> lignesDto = new ArrayList<>();
-        for(LigneCommande ligne : commande.getLignes()) {
-        	lignesDto.add(new LigneCommandeDTO(ligne));
-        }
-        dto.setLignes(lignesDto);
+                
+        dto.setLignes(commande.getLignes());
         
         Integer idTableRestaurant = reservationService.getIdTableRestaurantById(commande.getReservation().getIdReservation());
         dto.setIdTableRestaurant(idTableRestaurant);

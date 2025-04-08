@@ -79,7 +79,7 @@ public class CommandeRest {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Commande non trouvée pour cet id et ce statut");
 	}
 	
-	@PutMapping("{id}")
+	@GetMapping("{id}")
 	public ResponseEntity<Object> getById(@PathVariable("id") Integer id) throws CommandeServiceException, TableRestaurantServiceException {
 		Commande commande;
 		try {
