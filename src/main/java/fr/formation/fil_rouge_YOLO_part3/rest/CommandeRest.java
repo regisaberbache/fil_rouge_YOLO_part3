@@ -30,6 +30,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException
 import io.swagger.v3.oas.annotations.Operation;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired

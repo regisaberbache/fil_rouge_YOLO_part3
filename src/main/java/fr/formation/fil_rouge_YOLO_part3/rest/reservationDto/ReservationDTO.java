@@ -18,17 +18,13 @@ public class ReservationDTO {
 	private String statut;
 	private LocalDateTime horaireReservation;
 	private UtilisateurDTO utilisateur;
-
 	
 	public ReservationDTO(Reservation reservation) {
-		UtilisateurMapper utilisateurMapper = new UtilisateurMapper();
-		
 		this.idReservation = reservation.getIdReservation();
 		this.nbPersonne = reservation.getNbPersonne();
 		this.statut = reservation.getStatut();
 		this.horaireReservation = reservation.getHoraireReservation();
 		this.utilisateur = new UtilisateurDTO(reservation.getUtilisateur());
-		//this.utilisateur = utilisateurWrapper.toDto(reservation.getUtilisateur());
 	}
 	
 	public Reservation toEntity() {
