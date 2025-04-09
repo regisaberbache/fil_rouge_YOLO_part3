@@ -64,10 +64,10 @@ public class TableRestaurantServiceImpl implements TableRestaurantService {
 	    List<TableRestaurantDTO> tablesOccupees = toutesLesTables.stream()
 	        .filter(table -> table.getRestaurant() != null && idRestau.equals(table.getRestaurant().getIdRestaurant()))
 	        .filter(table -> table.getReservations() != null && !table.getReservations().isEmpty() && table
-	            .getReservations().stream().anyMatch(reservation -> "arrivée".equals(reservation.getStatut())))
+	            .getReservations().stream().anyMatch(reservation -> "arrivee".equals(reservation.getStatut())))
 	        .map(table -> {
 	            List<ReservationDTO> reservationsFiltrees = table.getReservations().stream()
-	                .filter(reservation -> "arrivée".equals(reservation.getStatut()))
+	                .filter(reservation -> "arrivee".equals(reservation.getStatut()))
 	                .map(reservation -> new ReservationDTO(reservation))
 	                .collect(Collectors.toList());
 	            
