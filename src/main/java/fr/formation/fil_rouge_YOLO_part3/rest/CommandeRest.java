@@ -215,7 +215,7 @@ public class CommandeRest {
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
-
+		System.out.println("commande " + commande.getIdCommande() + " passé en : " + commande.getStatut());
 		return ResponseEntity.ok(commandeMapper.toDTO(commande));
 	}
 	

@@ -55,6 +55,14 @@ public class TableRestaurantRest {
 		}
 		return ResponseEntity.ok(lst);
 	}
+	
+	// TODO
+	/*
+	 * @GetMapping public ResponseEntity<TableRestaurantDT>> getTableById() {
+	 * List<TableRestaurantDTO> lst = new ArrayList<>(); for (TableRestaurant
+	 * tableRestaurant : service.getAllTableRestaurants()) { lst.add(new
+	 * TableRestaurantDTO(tableRestaurant)); } return ResponseEntity.ok(lst); }
+	 */
 
 	@GetMapping("{idRestau}")
 	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("idRestau") Integer id) {

@@ -35,6 +35,16 @@ public class ReservationRest {
 	public ResponseEntity<List<ReservationDTO>> getAllReservations() {
 	    return ResponseEntity.ok(service.getAllReservationsAsDTOs());
 	}
+	
+	@GetMapping("/table/{idTableRestaurant}")
+	public ResponseEntity<List<ReservationDTO>> getReservationByIdTableRestaurant(@PathVariable Integer idTableRestaurant) {
+	    List<ReservationDTO> filteredReservations = service.getAllReservationsAsDTOs()
+	        .stream()
+	        .filter(reservation -> reservation.getIdTableRestaurant().equals(idTableRestaurant))
+	        .collect(Collectors.toList());
+	    
+	    return ResponseEntity.ok(filteredReservations);
+	}
 
 	@GetMapping("/{idRestau}")
 	public ResponseEntity<List<ReservationDTO>> getReservationsByIdRestaurant(@PathVariable("idRestau") Integer id) throws RestaurantServiceException {
