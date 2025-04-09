@@ -42,6 +42,7 @@ public class AppConfigSecurity {
 					.requestMatchers(HttpMethod.GET, "/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.GET, "/commandes/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.GET, "/reservations/**").hasAnyAuthority("Admin","Serveur","Chef")
+					.requestMatchers(HttpMethod.GET, "/carte/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.PUT,"/tables/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.PUT,"/commandes/**").hasAnyAuthority("Admin","Serveur","Chef")
 					.requestMatchers(HttpMethod.PUT, "/reservations/**").hasAnyAuthority("Admin","Serveur","Chef")
