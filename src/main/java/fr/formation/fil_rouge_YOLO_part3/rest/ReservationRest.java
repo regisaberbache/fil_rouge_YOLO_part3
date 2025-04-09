@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
@@ -31,10 +33,24 @@ public class ReservationRest {
 
 	@Autowired
 	RestaurantService restaurantService;
+	
+	@Autowired
+	ReservationRepository reservationRepository;
 
 	@GetMapping
 	public ResponseEntity<List<ReservationDTO>> getAllReservations() {
 	    return ResponseEntity.ok(service.getAllReservationsAsDTOs());
+	}
+	
+	@GetMapping("/table/{idTableRestaurant}")
+	public ResponseEntity<ReservationDTO> getReservationByIdTableRestaurant(@PathVariable Integer idTableRestaurant) {
+	    List<ReservationDTO> filteredReservations = service.getAllReservationsAsDTOs()
+	        .stream()
+	        .filter(reservation -> reservation.getIdTableRestaurant().equals(idTableRestaurant))
+	        .filter(reservation -> "arrivee".equals(reservation.getStatut()))
+	        .collect(Collectors.toList());
+	    
+	    return ResponseEntity.ok(filteredReservations.get(0));
 	}
 
 	@GetMapping("/{idRestau}")
@@ -56,11 +72,19 @@ public class ReservationRest {
 	}
 
 
-	@PutMapping
-	public ResponseEntity<ReservationDTO> update(@RequestBody ReservationDTO reservationDto) {
-		// TODO Gérer les exceptions
-		service.updateReservation(reservationDto.toEntity());
-		return ResponseEntity.ok(reservationDto);
+	@PutMapping("/{id}/statut")
+	public ResponseEntity<ReservationDTO> update(@PathVariable Integer id, @RequestBody Map<String, String> body) {
+		String nouveauStatut = body.get("statut");
+
+	    Reservation reservation = reservationRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Réservation non trouvée"));
+
+	    reservation.setStatut(nouveauStatut);
+	    reservationRepository.save(reservation);
+
+	    // Convertir en DTO pour renvoyer la réponse
+	    ReservationDTO reservationDto = new ReservationDTO(reservation);
+	    return ResponseEntity.ok(reservationDto);
 	}
 	
 	@DeleteMapping("{id}")

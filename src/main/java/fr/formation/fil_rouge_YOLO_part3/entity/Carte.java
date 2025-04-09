@@ -40,6 +40,4 @@ public class Carte {
 		this.plats = plats;
 	}
 	
-	
-
 }

@@ -1,6 +1,7 @@
 package fr.formation.fil_rouge_YOLO_part3.rest.LigneCommandeDto;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
+import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class LigneCommandeDTO {
 	private Integer idPlat;
 	private Integer idCommande;
 	private Integer quantite;
+	private Plat plat;
 	
 	
 	public LigneCommandeDTO(LigneCommande ligneCommande) {
@@ -20,6 +22,7 @@ public class LigneCommandeDTO {
 		this.idPlat = ligneCommande.getPlat().getIdPlat();
 		this.idCommande = ligneCommande.getCommande().getIdCommande();
 		this.quantite = ligneCommande.getQuantite();
+		this.plat = ligneCommande.getPlat();
 	}
 	
 	
