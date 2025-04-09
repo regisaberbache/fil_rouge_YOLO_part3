@@ -102,7 +102,7 @@ public class TableRestaurantRest {
 	                    r.getHoraireReservation() != null &&
 	                    !r.getHoraireReservation().isBefore(maintenantMoins30) &&
 	                    !r.getHoraireReservation().isAfter(finJournee) &&
-	                    !"arrivée".equalsIgnoreCase(r.getStatut())
+	                    !"arrivee".equalsIgnoreCase(r.getStatut())
 	                )
 	                .collect(Collectors.toList());
 	            table.setReservations(reservationsFiltrees);
