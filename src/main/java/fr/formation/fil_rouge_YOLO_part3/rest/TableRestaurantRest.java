@@ -58,7 +58,7 @@ public class TableRestaurantRest {
 
 	@GetMapping("{idRestau}")
 	public ResponseEntity<List<TableRestaurantDTO>> getTablesNonOccupees(@PathVariable("idRestau") Integer id) {
-		Restaurant restaurant;
+	    Restaurant restaurant;
 	    try {
 	        restaurant = restaurantService.getById(id);
 	    } catch (RestaurantServiceException e) {
@@ -70,27 +70,39 @@ public class TableRestaurantRest {
 	    LocalDateTime maintenantMoins30 = LocalDateTime.now().minusMinutes(30);
 	    LocalDateTime finJournee = LocalDate.now().atTime(LocalTime.MAX);
 
-	    for (TableRestaurant table : tables) {
-	        List<Reservation> res = table.getReservations();
-	        if (res != null) {
-	            table.setReservations(
-	                res.stream()
-	                   .filter(r -> {
-	                       LocalDateTime horaire = r.getHoraireReservation();
-	                       return horaire != null
-	                              && !horaire.isBefore(maintenantMoins30)
-	                              && !horaire.isAfter(finJournee);
-	                   })
-	                   .collect(Collectors.toList())
-	            );
-	        }
-	    }
+	    List<TableRestaurantDTO> tablesDisponibles = tables.stream()
+	        .filter(table -> {
+	            List<Reservation> reservations = table.getReservations();
 
-	    List<TableRestaurantDTO> tablesNonOccupees = tables.stream()
-	            .map(table -> new TableRestaurantDTO(table))
-	            .collect(Collectors.toList());
+	            if (reservations == null || reservations.isEmpty()) {
+	                return true;
+	            }
 
-	    return ResponseEntity.ok(tablesNonOccupees);
+	            boolean aUneReservationBloquante = reservations.stream()
+	                .anyMatch(r ->
+	                    "arrivée".equalsIgnoreCase(r.getStatut())
+	                    && r.getHoraireReservation() != null
+	                    && !r.getHoraireReservation().isBefore(maintenantMoins30)
+	                    && !r.getHoraireReservation().isAfter(finJournee)
+	                );
+
+	            return !aUneReservationBloquante;
+	        })
+	        .peek(table -> {
+	            List<Reservation> reservationsFiltrees = table.getReservations().stream()
+	                .filter(r ->
+	                    r.getHoraireReservation() != null &&
+	                    !r.getHoraireReservation().isBefore(maintenantMoins30) &&
+	                    !r.getHoraireReservation().isAfter(finJournee) &&
+	                    !"arrivée".equalsIgnoreCase(r.getStatut())
+	                )
+	                .collect(Collectors.toList());
+	            table.setReservations(reservationsFiltrees);
+	        })
+	        .map(TableRestaurantDTO::new)
+	        .collect(Collectors.toList());
+
+	    return ResponseEntity.ok(tablesDisponibles);
 	}
 
 	/*
