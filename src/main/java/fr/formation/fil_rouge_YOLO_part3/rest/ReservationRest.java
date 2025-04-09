@@ -43,13 +43,14 @@ public class ReservationRest {
 	}
 	
 	@GetMapping("/table/{idTableRestaurant}")
-	public ResponseEntity<List<ReservationDTO>> getReservationByIdTableRestaurant(@PathVariable Integer idTableRestaurant) {
+	public ResponseEntity<ReservationDTO> getReservationByIdTableRestaurant(@PathVariable Integer idTableRestaurant) {
 	    List<ReservationDTO> filteredReservations = service.getAllReservationsAsDTOs()
 	        .stream()
 	        .filter(reservation -> reservation.getIdTableRestaurant().equals(idTableRestaurant))
+	        .filter(reservation -> "arrivee".equals(reservation.getStatut()))
 	        .collect(Collectors.toList());
 	    
-	    return ResponseEntity.ok(filteredReservations);
+	    return ResponseEntity.ok(filteredReservations.get(0));
 	}
 
 	@GetMapping("/{idRestau}")
