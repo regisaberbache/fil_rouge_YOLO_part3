@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}, allowedHeaders = "*")
 @RequestMapping("/commandes")
 public class CommandeRest {
 	@Autowired
@@ -103,9 +104,31 @@ public class CommandeRest {
 	// Crée commande vide avec idReservation et idTableRestaurant. Statut "brouillon" par défaut.
 	/* Exemple de JSON dans le body du POST :
 	{
-	    "idReservation": 1,
-	    "idTableRestaurant": 1,
-	    "lignes": []
+	  "statut": "en_cours",
+	  "reservationDto": {
+	    "idReservation": 2,
+	    "nbPersonne": 4,
+	    "statut": "arrivee",
+	    "horaireReservation": "2025-04-09T12:30:00",
+	    "utilisateur": {
+	      "idUtilisateur": 3,
+	      "nom": "Dupont",
+	      "prenom": "Jean",
+	      "telephone": "0612345678",
+	      "email": "jean.dupont@email.com",
+	      "roleDto": {
+	        "idRole": 1,
+	        "libelle": "Client"
+	      },
+	      "idRestaurant": 1,
+	      "nomRestaurant": "Le Bistro Parisien"
+	    },
+	    "idTableRestaurant": 4
+	  },
+	  "idTableRestaurant": 4,
+	  "nomClient": "Jean Dupont",
+	  "nbPersonnes": 4,
+	  "numeroTable": 12
 	}
 	*/
 	@PostMapping
@@ -143,7 +166,7 @@ public class CommandeRest {
 		} catch (PlatServiceException e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("qte plat modifiee => " + qtePlatFinale);
 	    return ResponseEntity.ok(qtePlatFinale);
 	}
 
