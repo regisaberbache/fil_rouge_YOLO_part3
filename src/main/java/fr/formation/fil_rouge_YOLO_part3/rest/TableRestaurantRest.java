@@ -88,7 +88,7 @@ public class TableRestaurantRest {
 
 	            boolean aUneReservationBloquante = reservations.stream()
 	                .anyMatch(r ->
-	                    "arrivée".equalsIgnoreCase(r.getStatut())
+	                    "arrivee".equalsIgnoreCase(r.getStatut())
 	                    && r.getHoraireReservation() != null
 	                    && !r.getHoraireReservation().isBefore(maintenantMoins30)
 	                    && !r.getHoraireReservation().isAfter(finJournee)
@@ -102,7 +102,7 @@ public class TableRestaurantRest {
 	                    r.getHoraireReservation() != null &&
 	                    !r.getHoraireReservation().isBefore(maintenantMoins30) &&
 	                    !r.getHoraireReservation().isAfter(finJournee) &&
-	                    !"arrivée".equalsIgnoreCase(r.getStatut())
+	                    !"arrivee".equalsIgnoreCase(r.getStatut())
 	                )
 	                .collect(Collectors.toList());
 	            table.setReservations(reservationsFiltrees);
