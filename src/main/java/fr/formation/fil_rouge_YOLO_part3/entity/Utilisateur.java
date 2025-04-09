@@ -43,7 +43,6 @@ public class Utilisateur implements UserDetails {
 	@JoinColumn(name = "id_roles")
 	private Role role;
 
-
 	@OneToOne
 	@JoinColumn(name = "id_restaurants")
 	private Restaurant restaurant;

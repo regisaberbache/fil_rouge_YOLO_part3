@@ -2,10 +2,8 @@ package fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto;
 
 import java.util.List;
 
-import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
-import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
-import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceImpl;
+import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +15,10 @@ public class CommandeDTO {
 	
 	private Integer idCommande;
 	private String statut;
-	private Integer idReservation;
+	private ReservationDTO reservationDto;
 	private Integer idTableRestaurant;
+	private String nomClient;
+    private Integer nbPersonnes;
+    private Integer numeroTable;
 	private List<LigneCommande> lignes;
-
 }

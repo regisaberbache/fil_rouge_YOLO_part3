@@ -2,7 +2,6 @@ package fr.formation.fil_rouge_YOLO_part3.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,21 +38,28 @@ public class Reservation {
 	@Column(name = "horaire_reservation")
 	private LocalDateTime horaireReservation;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
 	
-	public Reservation(Integer nbPersonne, String statut, LocalDateTime horaireReservation) {
+	@ManyToOne
+	@JoinColumn(name="id_restaurants")
+	private Restaurant restaurant;
+	
+	public Reservation(Integer idTableRestaurant, Integer nbPersonne, String statut, LocalDateTime horaireReservation,
+			Utilisateur utilisateur) {
+		this.idTableRestaurant = idTableRestaurant;
 		this.nbPersonne = nbPersonne;
 		this.statut = statut;
 		this.horaireReservation = horaireReservation;
-	}
-
-	@Override
-	public String toString() {
-		return "Reservation idReservation=" + idReservation + ", Table Restaurant=" + idTableRestaurant + ", nbPersonne=" + nbPersonne + ", statut=" + statut
-				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+		this.utilisateur = utilisateur;
 	}
 	
+	@Override
+	public String toString() {
+		return "Reservation idReservation=" + idReservation + ", nbPersonne=" + nbPersonne + ", statut=" + statut
+				+ ", horaireReservation=" + horaireReservation + ", " + utilisateur.getNom();
+	}
+
 	
 }

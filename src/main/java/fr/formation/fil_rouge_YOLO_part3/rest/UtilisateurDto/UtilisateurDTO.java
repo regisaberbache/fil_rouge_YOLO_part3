@@ -20,8 +20,6 @@ public class UtilisateurDTO {
     
     @Email
     private String email;
-    private String loginDto;
-    private String passwordDto;
     private Role roleDto;
     private Integer idRestaurant;
     private String nomRestaurant;
@@ -32,8 +30,6 @@ public class UtilisateurDTO {
         this.prenom = utilisateur.getPrenom();
         this.telephone = utilisateur.getTelephone();
         this.email = utilisateur.getEmail();
-        this.loginDto = utilisateur.getLogin();
-        this.passwordDto = utilisateur.getPassword();
         this.roleDto = utilisateur.getRole();
         this.idRestaurant = utilisateur.getRestaurant().getIdRestaurant();
         this.nomRestaurant = utilisateur.getRestaurant().getNom();

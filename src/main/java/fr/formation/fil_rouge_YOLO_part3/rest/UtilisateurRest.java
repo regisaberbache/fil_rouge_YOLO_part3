@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
-import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurWrapper;
+import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurMapper;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
@@ -33,13 +33,13 @@ public class UtilisateurRest {
     private UtilisateurService service;
 
     @Autowired
-    private UtilisateurWrapper utilisateurWrapper;
+    private UtilisateurMapper utilisateurMapper;
 
     @GetMapping
     public ResponseEntity<List<UtilisateurDTO>> getAll() {
         List<UtilisateurDTO> lst = new ArrayList<>();
         for (Utilisateur utilisateur : service.getAllUtilisateurs()) {
-            lst.add(utilisateurWrapper.toDto(utilisateur));
+            lst.add(utilisateurMapper.toDto(utilisateur));
         }
         return ResponseEntity.ok(lst);
     }
@@ -48,7 +48,7 @@ public class UtilisateurRest {
     public ResponseEntity<Object> getById(@PathVariable("id") Integer id) {
         try {
             Utilisateur utilisateur = service.getUtilisateurById(id);
-            return ResponseEntity.ok(utilisateurWrapper.toDto(utilisateur));
+            return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
         } catch (UtilisateurServiceException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("identifiant non trouvé");
         }
@@ -57,8 +57,8 @@ public class UtilisateurRest {
     @PostMapping
     public ResponseEntity<UtilisateurDTO> create(@Valid @RequestBody UtilisateurDTO utilisateurDto) 
             throws RestaurantServiceException {
-        Utilisateur utilisateur = service.createUtilisateur(utilisateurWrapper.toEntity(utilisateurDto));
-		return ResponseEntity.ok(utilisateurWrapper.toDto(utilisateur));
+        Utilisateur utilisateur = service.createUtilisateur(utilisateurMapper.toEntity(utilisateurDto));
+		return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
     }
 
     @PutMapping("{id}")
@@ -66,9 +66,9 @@ public class UtilisateurRest {
             @PathVariable("id") Integer id) throws RestaurantServiceException {
         try {
             Utilisateur existingUtilisateur = service.getUtilisateurById(id);
-            Utilisateur updatedUtilisateur = utilisateurWrapper.updateEntity(existingUtilisateur, utilisateurDto);
+            Utilisateur updatedUtilisateur = utilisateurMapper.updateEntity(existingUtilisateur, utilisateurDto);
             service.updateUtilisateur(updatedUtilisateur);
-            return ResponseEntity.ok(utilisateurWrapper.toDto(updatedUtilisateur));
+            return ResponseEntity.ok(utilisateurMapper.toDto(updatedUtilisateur));
         } catch (UtilisateurServiceException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -79,7 +79,7 @@ public class UtilisateurRest {
         try {
             Utilisateur utilisateur = service.getUtilisateurById(id);
             service.deleteUtilisateur(utilisateur);
-            return ResponseEntity.ok(utilisateurWrapper.toDto(utilisateur));
+            return ResponseEntity.ok(utilisateurMapper.toDto(utilisateur));
         } catch (UtilisateurServiceException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
