@@ -11,7 +11,7 @@ import fr.formation.fil_rouge_YOLO_part3.security.jwt.AuthenticationRequest;
 import fr.formation.fil_rouge_YOLO_part3.security.jwt.AuthenticationResponse;
 import fr.formation.fil_rouge_YOLO_part3.security.jwt.AuthenticationService;
 
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
