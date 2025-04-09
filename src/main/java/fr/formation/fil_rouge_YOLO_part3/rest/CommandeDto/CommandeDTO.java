@@ -21,4 +21,5 @@ public class CommandeDTO {
     private Integer nbPersonnes;
     private Integer numeroTable;
 	private List<LigneCommande> lignes;
+
 }
