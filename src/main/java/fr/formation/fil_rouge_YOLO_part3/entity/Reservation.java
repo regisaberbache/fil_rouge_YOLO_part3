@@ -30,10 +30,6 @@ public class Reservation {
 	@Column(name = "id_tables_restaurant")
     private Integer idTableRestaurant;
 	
-//	@ManyToOne
-//	@JoinColumn(name="id_tables_restaurant")
-//	private TableRestaurant tableRestaurant;
-	
 	@Column(name="nombre_personne")
 	private Integer nbPersonne;
  
@@ -46,6 +42,10 @@ public class Reservation {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_utilisateurs")
 	private Utilisateur utilisateur;
+	
+	@ManyToOne
+	@JoinColumn(name="id_restaurants")
+	private Restaurant restaurant;
 	
 	public Reservation(Integer idTableRestaurant, Integer nbPersonne, String statut, LocalDateTime horaireReservation,
 			Utilisateur utilisateur) {
