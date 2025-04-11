@@ -20,5 +20,4 @@ public interface ReservationService {
 	ReservationDTO createReservationFromDTO(ReservationDTO reservationDto);
 	String getNomUtilisateurByUtilisateur(Integer integer);
 	Integer getNbPersonneById(Integer idReservation);
-
 }

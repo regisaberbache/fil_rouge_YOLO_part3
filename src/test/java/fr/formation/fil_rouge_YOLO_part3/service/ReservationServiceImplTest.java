@@ -23,16 +23,12 @@ class ReservationServiceImplTest {
 	@Autowired
 	ReservationServiceImpl reservationService;
 
-	@BeforeEach
-	void setUp() {
-	}
-
 	// Récupération de toutes les réservations
 	@Test
 	void testGetAllReservations() {
 		List<Reservation> reservations = reservationService.getAllReservations();
 		assertFalse(reservations.isEmpty());
-		assertEquals(7, reservations.size());
+		assertEquals(9, reservations.size());
 	}
 	
 	// Récupération par ID

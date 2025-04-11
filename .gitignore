@@ -57,3 +57,5 @@ buildNumber.properties
 *.jks
 application-*.yml
 application-*.properties
+/.apt_generated/
+/.apt_generated_tests/
