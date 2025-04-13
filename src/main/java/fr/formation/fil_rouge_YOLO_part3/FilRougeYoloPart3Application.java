@@ -16,5 +16,4 @@ public class FilRougeYoloPart3Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 	}
-
 }

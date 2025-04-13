@@ -35,7 +35,7 @@ import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200/")
 @RequestMapping("/tables")
 public class TableRestaurantRest {
 	@Autowired
