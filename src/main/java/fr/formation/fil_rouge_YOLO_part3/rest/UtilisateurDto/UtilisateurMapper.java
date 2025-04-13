@@ -3,8 +3,8 @@ package fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @Component
 public class UtilisateurMapper {

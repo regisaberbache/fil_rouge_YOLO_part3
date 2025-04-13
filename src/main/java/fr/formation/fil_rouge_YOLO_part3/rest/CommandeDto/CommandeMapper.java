@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.LigneCommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
-import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
-import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 
 @Component
 public class CommandeMapper {

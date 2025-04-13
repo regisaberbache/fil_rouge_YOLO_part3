@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.RestaurantRepository;
 
 @Service

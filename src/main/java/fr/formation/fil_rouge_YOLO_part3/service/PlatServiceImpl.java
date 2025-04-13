@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.PlatServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.PlatRepository;
 
 @Service

@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
-import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @CrossOrigin(origins="http://localhost:4200")
 @RestController

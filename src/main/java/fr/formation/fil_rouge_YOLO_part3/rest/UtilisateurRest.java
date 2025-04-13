@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.UtilisateurServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.UtilisateurDto.UtilisateurMapper;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurService;
-import fr.formation.fil_rouge_YOLO_part3.service.UtilisateurServiceException;
 import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200/")

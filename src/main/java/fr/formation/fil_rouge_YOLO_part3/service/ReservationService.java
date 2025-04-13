@@ -5,6 +5,8 @@ import java.util.List;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;
 
 public interface ReservationService {

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
-import fr.formation.fil_rouge_YOLO_part3.service.RestaurantServiceException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")

@@ -3,6 +3,7 @@ package fr.formation.fil_rouge_YOLO_part3.service;
 import java.util.List;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.LigneCommandeServiceException;
 
 public interface LigneCommandeService {
 	LigneCommande createLigneCommande(LigneCommande ligneCommande);

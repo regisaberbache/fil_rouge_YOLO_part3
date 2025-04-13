@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Carte;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Utiliser la BDD SQLServer YOLOTEST

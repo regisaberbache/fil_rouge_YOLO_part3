@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.TableRestaurantRepository;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.reservationDto.ReservationDTO;

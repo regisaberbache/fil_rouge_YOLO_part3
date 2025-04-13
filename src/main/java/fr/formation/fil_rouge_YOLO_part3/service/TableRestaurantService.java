@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 
 public interface TableRestaurantService {

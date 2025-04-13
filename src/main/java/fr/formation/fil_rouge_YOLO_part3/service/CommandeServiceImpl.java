@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 import fr.formation.fil_rouge_YOLO_part3.entity.LigneCommande;
 import fr.formation.fil_rouge_YOLO_part3.entity.Plat;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.CommandeServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.PlatServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.CommandeRepository;
 
 @Service

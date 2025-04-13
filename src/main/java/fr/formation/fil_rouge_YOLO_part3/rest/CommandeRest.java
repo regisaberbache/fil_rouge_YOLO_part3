@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.CommandeServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.PlatServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.CommandeDto.CommandeMapper;
 import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
-import fr.formation.fil_rouge_YOLO_part3.service.CommandeServiceException;
 import fr.formation.fil_rouge_YOLO_part3.service.LigneCommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.PlatService;
-import fr.formation.fil_rouge_YOLO_part3.service.PlatServiceException;
-import fr.formation.fil_rouge_YOLO_part3.service.ReservationServiceException;
-import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantServiceException;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController

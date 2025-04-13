@@ -1,4 +1,4 @@
-package fr.formation.fil_rouge_YOLO_part3.service;
+package fr.formation.fil_rouge_YOLO_part3.exceptions;
 
 public class RestaurantServiceException extends Exception {
 

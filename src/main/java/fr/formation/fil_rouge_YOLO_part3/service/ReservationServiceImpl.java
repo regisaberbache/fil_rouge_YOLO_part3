@@ -12,6 +12,8 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.repository.ReservationRepository;
 import fr.formation.fil_rouge_YOLO_part3.repository.RestaurantRepository;
 import fr.formation.fil_rouge_YOLO_part3.repository.TableRestaurantRepository;

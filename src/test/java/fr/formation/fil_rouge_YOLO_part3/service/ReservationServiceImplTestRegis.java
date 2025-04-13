@@ -12,6 +12,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Utilisateur;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.ReservationServiceException;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.UtilisateurServiceException;
 
 @Sql({"/YOLOTEST_creationTables.sql", "/YOLOTEST_dataset.sql"})
 @SpringBootTest
