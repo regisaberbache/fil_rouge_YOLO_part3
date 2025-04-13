@@ -196,7 +196,6 @@ public class CommandeRest {
 		} catch (PlatServiceException e) {
 			e.printStackTrace();
 		}
-		
 	    return ResponseEntity.ok(qtePlatFinale);
 	}
 	
@@ -212,7 +211,6 @@ public class CommandeRest {
 		} catch (CommandeServiceException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
-
 		return ResponseEntity.ok(commandeMapper.toDTO(commande));
 	}
 	

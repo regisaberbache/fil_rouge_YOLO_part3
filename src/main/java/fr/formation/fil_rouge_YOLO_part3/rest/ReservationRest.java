@@ -43,6 +43,16 @@ public class ReservationRest {
 	    return ResponseEntity.ok(service.getAllReservationsAsDTOs());
 	}
 	
+	@GetMapping("/{idResa}")
+	public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Integer idResa) {
+	    try {
+	        Reservation reservation = service.getReservationById(idResa);
+	        return ResponseEntity.ok(new ReservationDTO(reservation));
+	    } catch (ReservationServiceException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+	}
+		
 	@GetMapping("/table/{idTableRestaurant}")
 	public ResponseEntity<ReservationDTO> getReservationByIdTableRestaurant(@PathVariable Integer idTableRestaurant) {
 	    List<ReservationDTO> filteredReservations = service.getAllReservationsAsDTOs()
