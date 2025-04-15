@@ -43,7 +43,7 @@ public class ReservationRest {
 	    return ResponseEntity.ok(service.getAllReservationsAsDTOs());
 	}
 	
-	@GetMapping("/{idResa}")
+	@GetMapping("/resa/{idResa}")
 	public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Integer idResa) {
 	    try {
 	        Reservation reservation = service.getReservationById(idResa);

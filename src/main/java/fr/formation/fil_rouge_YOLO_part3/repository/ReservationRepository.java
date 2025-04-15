@@ -20,9 +20,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 	@Query("SELECT r.idTableRestaurant FROM Reservation r WHERE r.id = :idReservation")
     Integer findIdTableRestaurantById(@Param("idReservation") Integer idReservation);
 	
-	@Query(value = "SELECT * FROM reservations WHERE horaire_reservation >= :now AND id_restaurants = :idrestaurant ORDER BY horaire_reservation ASC", nativeQuery = true)
-    List<Reservation> findFutureReservationsFromRestaurant(@Param("now") LocalDateTime now, @Param("idrestaurant") Integer idRestaurant);
-
+	@Query(value = "SELECT * FROM reservations WHERE horaire_reservation >= :now "
+			+ "AND id_restaurants = :idrestaurant ORDER BY horaire_reservation ASC", nativeQuery = true)
+    List<Reservation> findFutureReservationsFromRestaurant
+    (@Param("now") LocalDateTime now, @Param("idrestaurant") Integer idRestaurant);
 
 	Integer findTableRestaurantByIdTableRestaurant(Integer idReservation);
 	
@@ -31,5 +32,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
 	@Query("SELECT r.nbPersonne FROM Reservation r WHERE r.id = :idReservation")
 	Integer findNbPersonneByIdReservation(@Param("idReservation") Integer idReservation);;
-
 }
