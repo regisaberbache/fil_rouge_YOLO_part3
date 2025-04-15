@@ -140,7 +140,7 @@ public class CommandeServiceImpl implements CommandeService {
 
 	@Override
 	public List<Commande> getAllCommandesByStatut(String statut) {
-		return repo.findAllCommandeByCommandeStatut(statut);
+		return repo.findAllByStatut(statut);
 	}
 	
 }

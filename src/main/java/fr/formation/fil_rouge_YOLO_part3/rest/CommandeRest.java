@@ -103,10 +103,11 @@ public class CommandeRest {
 	}
 	
 
-	// Crée commande vide avec idReservation et idTableRestaurant. Statut "brouillon" par défaut.
+	// Crée commande vide liée à une réservation.
+	// Statut "brouillon" par défaut.
+	// On passe aussi le numéro de la table.
 	/* Exemple de JSON dans le body du POST :
 	{
-	  "statut": "en_cours",
 	  "reservationDto": {
 	    "idReservation": 2,
 	    "nbPersonne": 4,
@@ -127,9 +128,6 @@ public class CommandeRest {
 	    },
 	    "idTableRestaurant": 4
 	  },
-	  "idTableRestaurant": 4,
-	  "nomClient": "Jean Dupont",
-	  "nbPersonnes": 4,
 	  "numeroTable": 12
 	}
 	*/

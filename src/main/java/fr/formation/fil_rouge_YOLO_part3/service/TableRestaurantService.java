@@ -6,6 +6,7 @@ import java.util.List;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
 import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantOccupeeDTO;
 
 public interface TableRestaurantService {
 	void createTableRestaurant(TableRestaurant tableRestaurant);
@@ -14,6 +15,6 @@ public interface TableRestaurantService {
 	List<TableRestaurant> getAvailableTablesFromRestaurant(LocalDateTime startTime, LocalDateTime endTime, Integer restaurantId);
 	void updateTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException;
 	void deleteTableRestaurant(TableRestaurant tableRestaurant) throws TableRestaurantServiceException;
-	List<TableRestaurantDTO> getAllTablesOccupees(Integer idRestau);
+	List<TableRestaurantOccupeeDTO> getAllTablesOccupees(Integer idRestau);
 
 }

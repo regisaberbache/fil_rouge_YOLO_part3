@@ -38,5 +38,4 @@ public class LigneCommande {
 		this.plat = plat;
 		this.quantite = quantite;
 	}
-
 }

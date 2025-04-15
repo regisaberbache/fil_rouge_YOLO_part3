@@ -25,11 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.fil_rouge_YOLO_part3.entity.Reservation;
 import fr.formation.fil_rouge_YOLO_part3.entity.Restaurant;
 import fr.formation.fil_rouge_YOLO_part3.entity.TableRestaurant;
+import fr.formation.fil_rouge_YOLO_part3.exceptions.CommandeServiceException;
 import fr.formation.fil_rouge_YOLO_part3.exceptions.RestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.exceptions.TableRestaurantServiceException;
 import fr.formation.fil_rouge_YOLO_part3.rest.DemandeResaDto.DemandeResaDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantDTO;
 import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantLibreDTO;
+import fr.formation.fil_rouge_YOLO_part3.rest.TableRestaurantDto.TableRestaurantOccupeeDTO;
+import fr.formation.fil_rouge_YOLO_part3.service.CommandeService;
 import fr.formation.fil_rouge_YOLO_part3.service.ReservationService;
 import fr.formation.fil_rouge_YOLO_part3.service.RestaurantService;
 import fr.formation.fil_rouge_YOLO_part3.service.TableRestaurantService;
@@ -47,6 +50,9 @@ public class TableRestaurantRest {
 	@Autowired
 	ReservationService reservationService;
 
+	@Autowired
+	CommandeService commandeService;
+	
 	@GetMapping
 	public ResponseEntity<List<TableRestaurantDTO>> getAll() {
 		List<TableRestaurantDTO> lst = new ArrayList<>();
@@ -148,8 +154,9 @@ public class TableRestaurantRest {
 	}
 
 	@GetMapping("{idRestau}/occupees")
-	public ResponseEntity<List<TableRestaurantDTO>> getTablesOccupees(@PathVariable("idRestau") Integer idRestau) {
-		List<TableRestaurantDTO> tablesOccupees = service.getAllTablesOccupees(idRestau);
+	public ResponseEntity<List<TableRestaurantOccupeeDTO>> getTablesOccupees(@PathVariable("idRestau") Integer idRestau) throws CommandeServiceException {
+		List<TableRestaurantOccupeeDTO> tablesOccupees = service.getAllTablesOccupees(idRestau);
+		System.out.println(tablesOccupees.size());
 		return ResponseEntity.ok(tablesOccupees);
 	}
 

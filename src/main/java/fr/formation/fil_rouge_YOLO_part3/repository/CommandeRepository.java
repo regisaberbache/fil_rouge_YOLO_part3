@@ -12,7 +12,11 @@ import fr.formation.fil_rouge_YOLO_part3.entity.Commande;
 @Repository
 public interface CommandeRepository extends JpaRepository<Commande, Integer> {
 	
-	Commande findCommandeByIdCommande(Integer idCommande);
+	List<Commande> findAllByStatut(String statut);
+
+	// Obligé de faire une nativeQuery car on a cassé la relation objet en ayant idTableRestaurant dans la Reservation
+	// au lieu d'avoir un @ManyToOne de TableRestaurant.
+	// TODO : remettre TableRestaurant dans Reservation et changer la nativeQuery par une méthode nommée
 	
 	@Query(value = "SELECT c.* " +
             "FROM commandes c " +
@@ -20,9 +24,10 @@ public interface CommandeRepository extends JpaRepository<Commande, Integer> {
             "JOIN tables_restaurant t ON r.id_tables_restaurant = t.id " +
             "WHERE c.statut = :statut AND t.id_restaurants = :idRestau",
     nativeQuery = true)
-	List<Commande> findAllCommandeByCommandeStatutAndIdRestaurant(@Param("idRestau")Integer idrestau, @Param("statut") String statut);
-	
-	@Query("FROM Commande c WHERE c.statut = :statut")
-	List<Commande> findAllCommandeByCommandeStatut(@Param("statut") String statut);
-	
+	List<Commande> findAllCommandeByCommandeStatutAndIdRestaurant(@Param("idRestau")Integer idrestau, 
+			@Param("statut") String statut);
 }
+
+
+
+//Commande findCommandeByIdCommande(Integer idCommande);
